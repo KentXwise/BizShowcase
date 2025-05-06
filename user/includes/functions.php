@@ -93,4 +93,7 @@ function get_transactions($conn) {
     $stmt = $conn->query("SELECT p.*, s.subscription_type, s.user_id FROM payments p JOIN subscriptions s ON p.subscription_id = s.subscription_id");
     return $stmt->fetchAll(PDO::FETCH_ASSOC);
 }
+
+
+
 ?>

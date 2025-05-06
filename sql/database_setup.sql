@@ -294,3 +294,6 @@ BEGIN
     );
 END //
 DELIMITER ;
+
+-- Updated and Added Queeries
+ALTER TABLE users ADD COLUMN suspension_end_date DATETIME DEFAULT NULL;

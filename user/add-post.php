@@ -10,6 +10,19 @@ if (!isset($_SESSION['user_id'])) {
 
 $categories = get_categories($conn);
 $business_profile = get_business_profile($conn, $_SESSION['user_id']);
+
+// Function to check if the user has an active subscription
+function has_active_subscription($conn, $user_id) {
+    $stmt = $conn->prepare("SELECT subscription_status FROM subscriptions WHERE user_id = ? ORDER BY subscription_id DESC LIMIT 1");
+    $stmt->execute([$user_id]);
+    $subscription = $stmt->fetch(PDO::FETCH_ASSOC);
+    if ($subscription && $subscription['subscription_status'] === 'active') {
+        return true; // Active subscription
+    }
+    return false; // No subscription or not active
+}
+
+$is_subscribed = has_active_subscription($conn, $_SESSION['user_id']);
 ?>
 
 <!DOCTYPE html>
@@ -115,6 +128,25 @@ $business_profile = get_business_profile($conn, $_SESSION['user_id']);
         </div>
     </div>
 
+    <!-- Subscription Warning Modal -->
+    <div class="modal fade" id="subscriptionWarningModal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Subscription Required</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <p>You need an active subscription to post. Please subscribe to continue.</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <a href="subscription.php" class="btn btn-primary">Go to Subscription</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/js/bootstrap.bundle.min.js"></script>
     <script>
         $(document).ready(function() {
@@ -144,26 +176,32 @@ $business_profile = get_business_profile($conn, $_SESSION['user_id']);
                 $('#previewImages').html(imagesHtml);
             });
 
-            // Submit post
+            // Submit post with subscription check
             $('#postForm').submit(function(e) {
                 e.preventDefault();
-                let formData = new FormData(this);
-                formData.append('action', 'add_post');
-                
-                $.ajax({
-                    url: '../ajax/user_actions.php',
-                    method: 'POST',
-                    data: formData,
-                    contentType: false,
-                    processData: false,
-                    success: function(response) {
-                        alert('Post created successfully!');
-                        window.location.href = 'home.php';
-                    },
-                    error: function(xhr) {
-                        alert('Error: ' + xhr.responseText);
-                    }
-                });
+                let isSubscribed = <?php echo json_encode($is_subscribed); ?>;
+
+                if (!isSubscribed) {
+                    $('#subscriptionWarningModal').modal('show');
+                } else {
+                    let formData = new FormData(this);
+                    formData.append('action', 'add_post');
+                    
+                    $.ajax({
+                        url: '../ajax/user_actions.php',
+                        method: 'POST',
+                        data: formData,
+                        contentType: false,
+                        processData: false,
+                        success: function(response) {
+                            alert('Post created successfully!');
+                            window.location.href = 'home.php';
+                        },
+                        error: function(xhr) {
+                            alert('Error: ' + xhr.responseText);
+                        }
+                    });
+                }
             });
         });
     </script>

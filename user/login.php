@@ -12,14 +12,23 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $email = filter_input(INPUT_POST, 'email', FILTER_SANITIZE_EMAIL);
     $password = $_POST['password'];
 
-    $stmt = $conn->prepare("SELECT user_id, password FROM users WHERE email = ? AND status = 'active'");
+    $stmt = $conn->prepare("SELECT user_id, password, status, suspension_end_date FROM users WHERE email = ?");
     $stmt->execute([$email]);
     $user = $stmt->fetch(PDO::FETCH_ASSOC);
 
-    if ($user && password_verify($password, $user['password'])) {
-        $_SESSION['user_id'] = $user['user_id'];
-        header("Location: home.php");
-        exit();
+    if ($user) {
+        // Check if the account is suspended
+        $is_suspended = $user['status'] === 'suspended' && !empty($user['suspension_end_date']) && strtotime($user['suspension_end_date']) > time();
+
+        if ($is_suspended) {
+            $error = "Your account is suspended until " . date('F j, Y, g:i a', strtotime($user['suspension_end_date'])) . ".";
+        } elseif ($user['status'] === 'active' && password_verify($password, $user['password'])) {
+            $_SESSION['user_id'] = $user['user_id'];
+            header("Location: home.php");
+            exit();
+        } else {
+            $error = "Invalid email or password";
+        }
     } else {
         $error = "Invalid email or password";
     }

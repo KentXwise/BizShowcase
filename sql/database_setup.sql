@@ -297,3 +297,12 @@ DELIMITER ;
 
 -- Updated and Added Queeries
 ALTER TABLE users ADD COLUMN suspension_end_date DATETIME DEFAULT NULL;
+
+CREATE INDEX idx_users_status ON users(status);
+
+-- Trial added
+CREATE OR REPLACE VIEW vw_subscribed_users AS
+SELECT u.user_id, u.first_name, u.last_name, u.email, s.subscription_type
+FROM users u
+JOIN subscriptions s ON u.user_id = s.user_id
+WHERE s.subscription_status = 'approved' AND u.status != 'deleted';

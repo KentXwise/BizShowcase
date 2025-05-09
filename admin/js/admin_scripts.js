@@ -1,20 +1,25 @@
 $(document).ready(function() {
-    // Generic confirmation for delete actions
-    $('.delete-user, .delete-category, .delete-request').click(function(e) {
+    // Generic confirmation for delete actions (excluding delete-user, which is handled in account.php)
+    $('.delete-category, .delete-request').click(function(e) {
         e.preventDefault();
         if (confirm('Are you sure you want to delete this item? This action cannot be undone.')) {
-            let action = $(this).hasClass('delete-user') ? 'delete_user' :
-                         $(this).hasClass('delete-category') ? 'delete_category' : 'delete_request';
-            let id = $(this).data('user-id') || $(this).data('category-id') || $(this).data('request-id');
+            let action = $(this).hasClass('delete-category') ? 'delete_category' : 'delete_request';
+            let id = $(this).data('category-id') || $(this).data('request-id');
             $.ajax({
                 url: '../ajax/admin_actions.php',
                 method: 'POST',
-                data: { action: action, [action === 'delete_user' ? 'user_id' : action === 'delete_category' ? 'category_id' : 'request_id']: id },
-                success: function() {
-                    location.reload();
+                data: { action: action, [action === 'delete_category' ? 'category_id' : 'request_id']: id },
+                dataType: 'json',
+                success: function(response) {
+                    if (response.success) {
+                        alert(response.message || 'Item deleted successfully!');
+                        location.reload();
+                    } else {
+                        alert('Error: ' + (response.error || 'Unknown error'));
+                    }
                 },
-                error: function() {
-                    alert('An error occurred. Please try again.');
+                error: function(xhr) {
+                    alert('Error: ' + (xhr.responseJSON?.error || xhr.responseText || 'Unknown error'));
                 }
             });
         }
@@ -31,30 +36,18 @@ $(document).ready(function() {
             url: '../ajax/admin_actions.php',
             method: 'POST',
             data: { action: action, [action.includes('category') || action.includes('request') ? 'request_id' : 'payment_id']: id },
-            success: function() {
-                location.reload();
+            dataType: 'json',
+            success: function(response) {
+                if (response.success) {
+                    alert(response.message || 'Action completed successfully!');
+                    location.reload();
+                } else {
+                    alert('Error: ' + (response.error || 'Unknown error'));
+                }
             },
-            error: function() {
-                alert('An error occurred. Please try again.');
+            error: function(xhr) {
+                alert('Error: ' + (xhr.responseJSON?.error || xhr.responseText || 'Unknown error'));
             }
         });
-    });
-
-    // Suspend user
-    $('.suspend-user').click(function() {
-        if (confirm('Are you sure you want to suspend this user?')) {
-            let userId = $(this).data('user-id');
-            $.ajax({
-                url: '../ajax/admin_actions.php',
-                method: 'POST',
-                data: { action: 'suspend_user', user_id: userId },
-                success: function() {
-                    location.reload();
-                },
-                error: function() {
-                    alert('An error occurred. Please try again.');
-                }
-            });
-        }
     });
 });

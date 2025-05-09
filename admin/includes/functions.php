@@ -47,11 +47,15 @@ function get_dashboard_stats($conn) {
 
 function get_subscribed_users($conn) {
     $stmt = $conn->query("SELECT * FROM vw_subscribed_users");
-    return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    $users = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    // Filter out deleted users
+    return array_filter($users, function($user) {
+        return ($user['status'] ?? 'active') !== 'deleted';
+    });
 }
 
 function get_unsubscribed_users($conn) {
-    $stmt = $conn->query("SELECT u.* FROM users u LEFT JOIN subscriptions s ON u.user_id = s.user_id WHERE s.subscription_id IS NULL OR s.subscription_status != 'approved'");
+    $stmt = $conn->query("SELECT u.* FROM users u LEFT JOIN subscriptions s ON u.user_id = s.user_id WHERE (s.subscription_id IS NULL OR s.subscription_status != 'approved') AND u.status != 'deleted'");
     return $stmt->fetchAll(PDO::FETCH_ASSOC);
 }
 

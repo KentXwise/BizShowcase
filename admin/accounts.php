@@ -103,7 +103,7 @@ function is_user_suspended($user) {
                                 <button class="btn btn-warning btn-sm suspend-user" data-user-id="<?php echo $user['user_id']; ?>" data-bs-toggle="modal" data-bs-target="#suspendModal">Suspend</button>
                             <?php endif; ?>
                             <button class="btn btn-danger btn-sm delete-user" data-user-id="<?php echo $user['user_id']; ?>" data-bs-toggle="modal" data-bs-target="#deleteModal">Delete</button>
-                            <button class="btn btn-info btn-sm update-user" data-user-id="<?php echo $user['user_id']; ?>">Update</button>
+                            <button class="btn btn-info btn-sm view-user" data-user-id="<?php echo $user['user_id']; ?>" data-bs-toggle="modal" data-bs-target="#viewUserModal">View</button>
                         </td>
                     </tr>
                 <?php endforeach; ?>
@@ -131,7 +131,7 @@ function is_user_suspended($user) {
                                 <button class="btn btn-warning btn-sm suspend-user" data-user-id="<?php echo $user['user_id']; ?>" data-bs-toggle="modal" data-bs-target="#suspendModal">Suspend</button>
                             <?php endif; ?>
                             <button class="btn btn-danger btn-sm delete-user" data-user-id="<?php echo $user['user_id']; ?>" data-bs-toggle="modal" data-bs-target="#deleteModal">Delete</button>
-                            <button class="btn btn-info btn-sm update-user" data-user-id="<?php echo $user['user_id']; ?>">Update</button>
+                            <button class="btn btn-info btn-sm view-user" data-user-id="<?php echo $user['user_id']; ?>" data-bs-toggle="modal" data-bs-target="#viewUserModal">View</button>
                         </td>
                     </tr>
                 <?php endforeach; ?>
@@ -311,6 +311,94 @@ function is_user_suspended($user) {
         </div>
     </div>
 
+    <!-- View User Modal -->
+    <div class="modal fade" id="viewUserModal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header bg-light border-bottom">
+                    <h5 class="modal-title">User Information</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body p-3">
+                    <div class="card mb-3 shadow-sm">
+                        <div class="card-body">
+                            <h6 class="card-title border-bottom pb-2 mb-3">Account Information</h6>
+                            <div class="row">
+                                <div class="col-md-6 mb-2">
+                                    <label class="form-label fw-bold">First Name</label>
+                                    <span id="viewFirstName" class="form-control"></span>
+                                </div>
+                                <div class="col-md-6 mb-2">
+                                    <label class="form-label fw-bold">Last Name</label>
+                                    <span id="viewLastName" class="form-control"></span>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6 mb-2">
+                                    <label class="form-label fw-bold">Email</label>
+                                    <span id="viewEmail" class="form-control"></span>
+                                </div>
+                                <div class="col-md-6 mb-2">
+                                    <label class="form-label fw-bold">Contact Number</label>
+                                    <span id="viewContactNumber" class="form-control"></span>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6 mb-2">
+                                    <label class="form-label fw-bold">Address</label>
+                                    <span id="viewAddress" class="form-control"></span>
+                                </div>
+                                <div class="col-md-6 mb-2">
+                                    <label class="form-label fw-bold">Birthday</label>
+                                    <span id="viewBirthday" class="form-control"></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card shadow-sm">
+                        <div class="card-body">
+                            <h6 class="card-title border-bottom pb-2 mb-3">Business Information</h6>
+                            <div class="row">
+                                <div class="col-md-6 mb-2">
+                                    <label class="form-label fw-bold">Company Name</label>
+                                    <span id="viewCompanyName" class="form-control"></span>
+                                </div>
+                                <div class="col-md-6 mb-2">
+                                    <label class="form-label fw-bold">Postal Code</label>
+                                    <span id="viewPostalCode" class="form-control"></span>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6 mb-2">
+                                    <label class="form-label fw-bold">Business Email</label>
+                                    <span id="viewBusinessEmail" class="form-control"></span>
+                                </div>
+                                <div class="col-md-6 mb-2">
+                                    <label class="form-label fw-bold">Business Number</label>
+                                    <span id="viewBusinessNumber" class="form-control"></span>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6 mb-2">
+                                    <label class="form-label fw-bold">Business Address</label>
+                                    <span id="viewBusinessAddress" class="form-control"></span>
+                                </div>
+                                <div class="col-md-6 mb-2">
+                                    <label class="form-label fw-bold">Seller Type</label>
+                                    <span id="viewSellerType" class="form-control"></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer bg-light border-top">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/js/bootstrap.bundle.min.js"></script>
     <script>
         $(document).ready(function() {
@@ -469,6 +557,42 @@ function is_user_suspended($user) {
                             $('#deleteSuccessModal').modal('show');
                         } else {
                             alert('Error: ' + (response.error || 'Unknown error'));
+                        }
+                    },
+                    error: function(xhr) {
+                        alert('Error: ' + (xhr.responseJSON?.error || xhr.responseText || 'Unknown error'));
+                    }
+                });
+            });
+
+            // View User Modal: Populate user information via AJAX
+            $('.view-user').on('click', function() {
+                const userId = $(this).data('user-id');
+
+                $.ajax({
+                    url: 'ajax/get_user_details.php',
+                    method: 'POST',
+                    data: { user_id: userId },
+                    dataType: 'json',
+                    success: function(response) {
+                        if (response.success) {
+                            const user = response.user;
+                            const business = response.business || {};
+
+                            $('#viewFirstName').text(user.first_name || 'N/A');
+                            $('#viewLastName').text(user.last_name || 'N/A');
+                            $('#viewEmail').text(user.email || 'N/A');
+                            $('#viewAddress').text(user.address || 'N/A');
+                            $('#viewContactNumber').text(user.contact_number || 'N/A');
+                            $('#viewBirthday').text(user.birthday || 'N/A');
+                            $('#viewCompanyName').text(business.company_name || 'N/A');
+                            $('#viewPostalCode').text(business.postal_code || 'N/A');
+                            $('#viewBusinessEmail').text(business.business_email || 'N/A');
+                            $('#viewBusinessAddress').text(business.business_address || 'N/A');
+                            $('#viewBusinessNumber').text(business.business_number || 'N/A');
+                            $('#viewSellerType').text(business.seller_type || 'N/A');
+                        } else {
+                            alert('Error: ' + (response.error || 'Unable to load user details'));
                         }
                     },
                     error: function(xhr) {

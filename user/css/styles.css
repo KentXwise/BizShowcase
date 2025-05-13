@@ -1,11 +1,43 @@
 .form-section {
     display: flex;
-    align-items: center;
     justify-content: center;
+    align-items: center;
     min-height: 100vh;
-    padding: 20px;
+    background-color: #f8f9fa;
 }
 
+.error {
+    background-color: #f8d7da;
+    color: #721c24;
+    padding: 0.75rem 1.25rem;
+    border-radius: 0.25rem;
+    margin-bottom: 1rem;
+    text-align: center;
+}
+
+.warning {
+    background-color: #fff3cd;
+    color: #856404;
+    padding: 0.75rem 1.25rem;
+    border-radius: 0.25rem;
+    margin-bottom: 1rem;
+    text-align: center;
+}
+
+.form-control {
+    border-radius: 0.25rem;
+    box-shadow: none;
+}
+
+.btn-primary {
+    background-color: #007bff;
+    border: none;
+    border-radius: 0.25rem;
+}
+
+.btn-primary:hover {
+    background-color: #0056b3;
+}
 .image-section {
     display: flex;
     align-items: center;

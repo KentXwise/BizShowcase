@@ -13,13 +13,23 @@ $business_profile = get_business_profile($conn, $_SESSION['user_id']);
 
 // Function to check if the user has an active subscription
 function has_active_subscription($conn, $user_id) {
-    $stmt = $conn->prepare("SELECT subscription_status FROM subscriptions WHERE user_id = ? ORDER BY subscription_id DESC LIMIT 1");
+    // Check for an approved subscription and valid payment
+    $stmt = $conn->prepare("
+        SELECT s.subscription_status, p.payment_status, u.status
+        FROM subscriptions s
+        LEFT JOIN payments p ON s.subscription_id = p.subscription_id
+        JOIN users u ON s.user_id = u.user_id
+        WHERE s.user_id = ? 
+        AND s.subscription_status = 'approved'
+        AND (p.payment_status = 'paid' OR p.payment_status IS NULL)
+        AND u.status = 'active'
+        ORDER BY s.created_at DESC 
+        LIMIT 1
+    ");
     $stmt->execute([$user_id]);
-    $subscription = $stmt->fetch(PDO::FETCH_ASSOC);
-    if ($subscription && $subscription['subscription_status'] === 'active') {
-        return true; // Active subscription
-    }
-    return false; // No subscription or not active
+    $result = $stmt->fetch(PDO::FETCH_ASSOC);
+
+    return $result !== false; // Return true if a valid subscription exists
 }
 
 $is_subscribed = has_active_subscription($conn, $_SESSION['user_id']);

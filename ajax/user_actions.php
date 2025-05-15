@@ -113,42 +113,80 @@ switch ($action) {
         }
         break;
 
-    case 'add_post':
-        $company_name = htmlspecialchars($_POST['company_name'] ?? '', ENT_QUOTES, 'UTF-8');
-        $category_id = $_POST['category_id'];
-        $description = htmlspecialchars($_POST['description'] ?? '', ENT_QUOTES, 'UTF-8');
-        $business_email = htmlspecialchars($_POST['business_email'] ?? '', ENT_QUOTES, 'UTF-8');
-        $business_address = htmlspecialchars($_POST['business_address'] ?? '', ENT_QUOTES, 'UTF-8');
-        $business_number = htmlspecialchars($_POST['business_number'] ?? '', ENT_QUOTES, 'UTF-8');
-        $seller_type = $_POST['seller_type'];
-    
-        $stmt = $conn->prepare("INSERT INTO posts (user_id, company_name, category_id, description, business_email, business_address, business_number, seller_type) VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
-        $stmt->execute([$_SESSION['user_id'], $company_name, $category_id, $description, $business_email, $business_address, $business_number, $seller_type]);
-        $post_id = $conn->lastInsertId();
-    
+case 'add_post':
+    $user_id = $_SESSION['user_id'];
+    $category_id = $_POST['category_id'] ?? 0;
+    $company_name = htmlspecialchars($_POST['company_name'] ?? '', ENT_QUOTES, 'UTF-8');
+    $description = htmlspecialchars($_POST['description'] ?? '', ENT_QUOTES, 'UTF-8');
+    $business_email = htmlspecialchars($_POST['business_email'] ?? '', ENT_QUOTES, 'UTF-8');
+    $business_address = htmlspecialchars($_POST['business_address'] ?? '', ENT_QUOTES, 'UTF-8');
+    $business_number = htmlspecialchars($_POST['business_number'] ?? '', ENT_QUOTES, 'UTF-8');
+    $seller_type = $_POST['seller_type'] ?? '';
+
+    // Validate inputs
+    if (!$category_id || !$company_name || !$description || !$business_email || !$business_address || !$business_number || !$seller_type) {
+        echo json_encode(['error' => 'All fields are required']);
+        exit;
+    }
+
+    // Validate category_id
+    $stmt = $conn->prepare("SELECT COUNT(*) FROM categories WHERE category_id = ? AND status = 'approved'");
+    $stmt->execute([$category_id]);
+    if ($stmt->fetchColumn() == 0) {
+        echo json_encode(['error' => 'Invalid or unapproved category']);
+        exit;
+    }
+
+    // Call stored procedure to create post
+    try {
+        $stmt = $conn->prepare("CALL sp_add_post(?, ?, ?, ?, ?, ?, ?, ?)");
+        $stmt->execute([
+            $user_id,
+            $category_id,
+            $company_name,
+            $description,
+            $business_email,
+            $business_address,
+            $business_number,
+            $seller_type
+        ]);
+        $result = $stmt->fetch(PDO::FETCH_ASSOC);
+        $post_id = $result['post_id'] ?? 0;
+
+        if (!$post_id) {
+            echo json_encode(['error' => 'Failed to create post']);
+            exit;
+        }
+
+        // Handle image uploads
         $upload_dir = '../assets/images/';
         if (!file_exists($upload_dir) && !mkdir($upload_dir, 0775, true)) {
-            echo json_encode(['error' => 'Failed to create images directory.']);
+            echo json_encode(['error' => 'Failed to create images directory']);
             exit;
         }
         if (!is_writable($upload_dir)) {
-            echo json_encode(['error' => 'Images directory is not writable.']);
+            echo json_encode(['error' => 'Images directory is not writable']);
             exit;
         }
-    
+
         if (!empty($_FILES['images']['name'][0])) {
             foreach ($_FILES['images']['tmp_name'] as $key => $tmp_name) {
                 $file_name = time() . '_' . basename($_FILES['images']['name'][$key]);
                 $target_file = $upload_dir . $file_name;
                 if (move_uploaded_file($tmp_name, $target_file)) {
                     $stmt = $conn->prepare("INSERT INTO post_images (post_id, image_path) VALUES (?, ?)");
-                    $stmt->execute([$post_id, 'assets/images/' . $file_name]); // Store relative path
+                    $stmt->execute([$post_id, 'assets/images/' . $file_name]);
                 }
             }
         }
-    
-        echo json_encode(['success' => 'Post created successfully!']);
-        exit;
+
+        echo json_encode(['success' => 'Post created successfully!', 'post_id' => $post_id]);
+    } catch (PDOException $e) {
+        $error_message = $e->getMessage();
+        error_log("sp_add_post error for user $user_id: $error_message");
+        echo json_encode(['error' => 'Failed to create post: ' . $error_message]);
+    }
+    exit;
     
     case 'delete_post':
         $post_id = $_POST['post_id'] ?? 0;

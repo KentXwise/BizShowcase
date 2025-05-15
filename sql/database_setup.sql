@@ -306,3 +306,55 @@ SELECT u.user_id, u.first_name, u.last_name, u.email, s.subscription_type
 FROM users u
 JOIN subscriptions s ON u.user_id = s.user_id
 WHERE s.subscription_status = 'approved' AND u.status != 'deleted';
+
+-- 5/15/2025 Added Queery
+DELIMITER //
+
+CREATE OR REPLACE PROCEDURE sp_add_post(
+    IN p_user_id INT,
+    IN p_category_id INT,
+    IN p_company_name VARCHAR(100),
+    IN p_description TEXT,
+    IN p_business_email VARCHAR(100),
+    IN p_business_address TEXT,
+    IN p_business_number VARCHAR(20),
+    IN p_seller_type VARCHAR(50)
+)
+BEGIN
+    DECLARE subscription_active INT;
+    DECLARE user_status ENUM('active', 'suspended', 'deleted');
+    
+    -- Check user status
+    SELECT status INTO user_status
+    FROM users
+    WHERE user_id = p_user_id;
+    
+    IF user_status != 'active' THEN
+        SIGNAL SQLSTATE '45000'
+        SET MESSAGE_TEXT = 'User account is not active';
+    END IF;
+    
+    -- Check if user has active subscription
+    SELECT COUNT(*) INTO subscription_active
+    FROM subscriptions s
+    LEFT JOIN payments p ON s.subscription_id = p.subscription_id
+    WHERE s.user_id = p_user_id 
+    AND s.subscription_status = 'approved'
+    AND (p.payment_status = 'paid' OR p.payment_status IS NULL);
+    
+    IF subscription_active > 0 THEN
+        INSERT INTO posts (
+            user_id, category_id, company_name, description, 
+            business_email, business_address, business_number, seller_type
+        ) VALUES (
+            p_user_id, p_category_id, p_company_name, p_description,
+            p_business_email, p_business_address, p_business_number, p_seller_type
+        );
+        SELECT LAST_INSERT_ID() AS post_id;
+    ELSE
+        SIGNAL SQLSTATE '45000'
+        SET MESSAGE_TEXT = 'User does not have an active subscription';
+    END IF;
+END //
+
+DELIMITER ;

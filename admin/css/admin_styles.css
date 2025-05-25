@@ -178,6 +178,35 @@
     border-color: #80bdff;
     box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
 }
+body {
+    font-family: 'Segoe UI', sans-serif;
+}
+.page-transition {
+    opacity: 1;
+    transform: translateX(0);
+    transition: opacity 0.5s ease, transform 0.5s ease;
+}
+
+.page-transition-exit {
+    opacity: 0;
+    transform: translateX(-100%);
+}
+
+
+.input-group-text {
+    background-color: #f0f0f0;
+    border-right: 0;
+}
+
+.input-group .form-control {
+    border-left: 0;
+}
+
+.alert {
+    font-size: 0.95rem;
+    padding: 0.75rem 1rem;
+}
+
 
 /* Responsive Adjustments */
 @media (max-width: 576px) {

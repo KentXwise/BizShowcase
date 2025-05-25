@@ -1,0 +1,60 @@
+body {
+  background-color: #f8f9fa;
+  font-family: 'Poppins', sans-serif;
+}
+
+.navbar {
+  z-index: 1030;
+  position: sticky;
+  top: 0;
+}
+
+.card-custom {
+  border: 1px solid #dee2e6;
+  border-radius: 20px;
+  padding: 1.5rem;
+  background: #fff;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+}
+
+table td {
+  vertical-align: middle;
+}
+
+.btn-sm {
+  font-size: 0.75rem;
+  padding: 0.375rem 0.75rem;
+}
+
+.status-paid {
+  color: green;
+  font-weight: bold;
+}
+
+.status-pending {
+  color: red;
+  font-weight: bold;
+}
+
+/* Responsive Adjustments */
+@media (max-width: 992px) {
+
+  h2 {
+    font-size: 1.4rem;
+  }
+}
+
+@media (max-width: 400px) {
+
+  .navbar .navbar-brand {
+    font-size: 1rem;
+  }
+
+  .navbar img {
+    width: 40px !important;
+  }
+
+  .card-custom {
+    padding: 1rem;
+  }
+}

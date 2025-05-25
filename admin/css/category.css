@@ -1,0 +1,136 @@
+body {
+    background-color: #f8f9fa;
+    font-family: 'Poppins', sans-serif;
+  }
+  .navbar {
+    z-index: 1030;
+    position: sticky;
+    top: 0;
+  }
+      .content-card {
+          border: 1px solid #dee2e6;
+          border-radius: 20px;
+          padding: 1.5rem;
+          box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+          background: #fff;
+      }
+      .card-custom {
+        padding: 1.5rem;
+        background: #fff;
+        border-radius: 1rem;
+        border: 1px solid #dee2e6;
+        box-shadow: 0 1px 4px rgba(0, 0, 0, 0.05);
+        overflow-x: auto;
+      }
+  
+      .btn-custom {
+        border-radius: 20px;
+        padding: 0.3rem 0.8rem;
+      }
+      
+  @media (max-width: 500px) {
+    .profile-pic {
+      width: 30px;
+      height: 30px;
+    }
+    .row > .col-3 {
+      flex: 0 0 100%;
+      max-width: 100%;
+      margin-bottom: 0.5rem;
+      text-align: left;
+    }
+    .row.fw-bold.text-center.mb-3 {
+      display: none; /* hide table header on mobile for simplicity */
+    }
+    .row.text-center.align-items-center {
+      flex-direction: column;
+      text-align: left;
+    }
+    .row.text-center.align-items-center > div {
+      margin-bottom: 0.5rem;
+    }
+  }
+  @media (max-width: 500px) {
+    /* Stack main content full width below offcanvas sidebar */
+    .col-md-10 {
+      flex: 0 0 100%;
+      max-width: 100%;
+    }
+  
+    /* Make account sections scrollable horizontally if needed */
+    .card-custom .row {
+      overflow-x: auto;
+      flex-wrap: wrap;
+    }
+  
+    .card-custom .row > div {
+      min-width: 200px;
+      flex: 0 0 auto;
+    }
+    .main-content-scrollable {
+      overflow-x: auto;
+      width: 100%;
+    }
+  }
+  
+  @media (max-width: 400px) {
+    /* Reduce padding and font size on extra small screens */
+    .card-custom {
+      padding: 1rem;
+    }
+
+    .navbar .navbar-brand {
+      font-size: 1rem;
+    }
+  
+    .navbar img {
+      width: 40px !important;
+    }
+  
+    .btn {
+      font-size: 0.75rem;
+    }
+  
+    h1, h4 {
+      font-size: 1.2rem;
+    }
+  }
+  /* Base font settings */
+  body, .sidebar-button, .navbar-brand, h1, h4, .btn, .card-custom, .offcanvas-title {
+    font-family: 'Poppins', sans-serif;
+  }
+  
+  /* Responsive font sizes */
+  @media (max-width: 992px) {
+    h1 {
+      font-size: 1.5rem;
+    }
+    h4 {
+      font-size: 1.2rem;
+    }
+    .btn {
+      font-size: 0.8rem;
+    }
+  }
+  
+  @media (max-width: 576px) {
+    h1 {
+      font-size: 1.2rem;
+    }
+    h4 {
+      font-size: 1rem;
+    }
+    .btn {
+      font-size: 0.75rem;
+    }
+  }
+  @media (max-width: 300px){
+    .navbar .container-fluid {
+      flex-direction: column;
+      align-items: start;
+    }
+  }
+  
+  
+  
+  

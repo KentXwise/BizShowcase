@@ -58,28 +58,40 @@ function is_user_suspended($user) {
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Accounts - BizShowcase</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link href="css/admin_styles.css" rel="stylesheet">
+    <link href="css/accounts.css" rel="stylesheet">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
 <body>
-    <nav class="navbar navbar-expand-lg navbar-light bg-light">
-        <div class="container-fluid">
-            <a class="navbar-brand" href="dashboard.php">BizShowcase Admin</a>
-            <div class="collapse navbar-collapse">
-                <ul class="navbar-nav me-auto">
-                    <li class="nav-item"><a class="nav-link" href="dashboard.php">Dashboard</a></li>
-                    <li class="nav-item"><a class="nav-link active" href="accounts.php">Accounts</a></li>
-                    <li class="nav-item"><a class="nav-link" href="category.php">Categories</a></li>
-                    <li class="nav-item"><a class="nav-link" href="transaction.php">Transactions</a></li>
-                    <li class="nav-item"><a class="nav-link" href="request.php">Requests</a></li>
-                    <li class="nav-item"><a class="nav-link" href="logout.php">Logout</a></li>
-                </ul>
-            </div>
-        </div>
-    </nav>
+    <!-- Top Navbar -->
+<nav class="navbar navbar-expand-lg navbar-dark" style="background-color: #2196f3;">
+  <div class="container-fluid justify-content-between">
+    
+    <!-- Hamburger menu for small screens -->
+    <button class="btn btn-outline-light d-lg-none" type="button" data-bs-toggle="offcanvas" data-bs-target="#sidebarOffcanvas">
+      ☰
+    </button>
 
-    <div class="container mt-4 admin-container">
-        <h2>Manage Accounts</h2>
+    <!-- Branding -->
+    <div class="d-flex align-items-center">
+      <img src="img/logo.png" alt="Profile" width="55px" class="rounded-circle me-2">
+      <span class="navbar-brand fw-bold">BIZShowcase</span>
+    </div>
+
+    <img src="img/gigago.png" alt="Profile" width="50px" class="rounded-circle">
+  </div>
+</nav>
+
+
+<div class="container-fluid">
+  <div class="row">
+  <?php include 'includes/sidebar.php'; ?>
+
+  <!-- Main Content -->
+    <div class="col-md-10 p-4" style="overflow-x: auto;">
+      <h1 class="fw-bold mb-4">Manage Accounts</h1>
+      
+
+    <div class="card-custom mb-5">
         <h3>Subscribed Users</h3>
         <table class="table" id="subscribed-users-table">
             <thead>
@@ -109,6 +121,8 @@ function is_user_suspended($user) {
                 <?php endforeach; ?>
             </tbody>
         </table>
+    </div>
+    <div class="card-custom mb-5">
 
         <h3>Unsubscribed Users</h3>
         <table class="table" id="unsubscribed-users-table">
@@ -137,6 +151,8 @@ function is_user_suspended($user) {
                 <?php endforeach; ?>
             </tbody>
         </table>
+    </div>
+    <div class="card-custom mb-5">
 
         <h3>Deleted Accounts</h3>
         <table class="table" id="deleted-users-table">

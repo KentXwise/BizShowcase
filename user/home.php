@@ -11,8 +11,8 @@ if (!isset($_SESSION['user_id'])) {
 $categories = get_categories($conn);
 $posts = get_all_posts($conn);
 
-// Set current date and time (12:10 PM PST on Monday, May 26, 2025)
-$currentDateTime = new DateTime('2025-05-26 12:10:00', new DateTimeZone('America/Los_Angeles'));
+// Set current date and time (08:08 PM PST on Monday, May 26, 2025)
+$currentDateTime = new DateTime('2025-05-26 20:08:00', new DateTimeZone('America/Los_Angeles'));
 
 // Function to get counts for likes, favorites, and comments
 function get_post_counts($conn, $post_id) {

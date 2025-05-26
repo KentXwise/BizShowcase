@@ -267,34 +267,34 @@ switch ($action) {
 
     case 'get_comments':
         $post_id = $_POST['post_id'] ?? 0;
-        if ($post_id) {
-            try {
-                // Verify post_id exists in posts table
-                $stmt = $conn->prepare("SELECT COUNT(*) FROM posts WHERE post_id = ?");
-                $stmt->execute([$post_id]);
-                $post_exists = $stmt->fetchColumn() > 0;
-                if (!$post_exists) {
-                    echo json_encode(['error' => 'Post ID does not exist']);
-                    break;
-                }
-
-                // Fetch comments
-                $stmt = $conn->prepare("SELECT c.comment_text, c.created_at, u.username 
-                                        FROM comments c 
-                                        JOIN users u ON c.user_id = u.user_id 
-                                        WHERE c.post_id = ? 
-                                        ORDER BY c.created_at DESC");
-                $stmt->execute([$post_id]);
-                $comments = $stmt->fetchAll(PDO::FETCH_ASSOC);
-                echo json_encode(['comments' => $comments]);
-            } catch (PDOException $e) {
-                error_log("Get comments error for post_id $post_id at " . date('Y-m-d H:i:s') . ": " . $e->getMessage());
-                echo json_encode(['error' => 'Failed to fetch comments: ' . $e->getMessage()]);
+         if ($post_id) {
+        try {
+            // Verify post_id exists in posts table
+            $stmt = $conn->prepare("SELECT COUNT(*) FROM posts WHERE post_id = ?");
+            $stmt->execute([$post_id]);
+            $post_exists = $stmt->fetchColumn() > 0;
+            if (!$post_exists) {
+                echo json_encode(['error' => 'Post ID does not exist']);
+                break;
             }
-        } else {
-            echo json_encode(['error' => 'Invalid post ID']);
+
+            // Fetch comments using first_name and last_name
+            $stmt = $conn->prepare("SELECT c.comment_text, c.created_at, CONCAT(u.first_name, ' ', u.last_name) AS username 
+                                    FROM comments c 
+                                    JOIN users u ON c.user_id = u.user_id 
+                                    WHERE c.post_id = ? 
+                                    ORDER BY c.created_at DESC");
+            $stmt->execute([$post_id]);
+            $comments = $stmt->fetchAll(PDO::FETCH_ASSOC);
+            echo json_encode(['comments' => $comments]);
+        } catch (PDOException $e) {
+            error_log("Get comments error for post_id $post_id at " . date('Y-m-d H:i:s') . ": " . $e->getMessage());
+            echo json_encode(['error' => 'Failed to fetch comments: ' . $e->getMessage()]);
         }
-        break;
+    } else {
+        echo json_encode(['error' => 'Invalid post ID']);
+    }
+    break;
 
     case 'get_post_counts':
         $post_id = $_POST['post_id'] ?? 0;

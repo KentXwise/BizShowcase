@@ -27,6 +27,18 @@ body {
         border-radius: 20px;
         padding: 0.3rem 0.8rem;
       }
+      @media (min-width: 992px) {
+  .content-area {
+    margin-left: 220px;
+    padding: 2rem;
+  }
+}
+@media (min-width: 1400px) {
+  .data-table {
+    max-width: 95%;
+    margin: auto;
+  }
+}
       
   @media (max-width: 500px) {
     .profile-pic {

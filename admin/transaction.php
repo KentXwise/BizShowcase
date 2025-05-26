@@ -46,7 +46,7 @@ $transactions = get_transactions($conn);
   <?php include 'includes/sidebar.php'; ?>
 
     <!-- Main Content -->
-    <div class="col-lg-10 p-4">
+    <div class="col-lg-10 p-4 ms-lg-220">
       <h2 class="fw-bold mb-4">Manage Transactions</h2>
         <div class="data-table card-custom">
             <div class="table-responsive">

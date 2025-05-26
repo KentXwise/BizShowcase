@@ -29,7 +29,7 @@ body {
   }
   
   /* Responsive Layouts */
-  @media (max-width: 992px) {
+  @media (max-width: 1080px) {
   
     h1 {
       font-size: 1.5rem;

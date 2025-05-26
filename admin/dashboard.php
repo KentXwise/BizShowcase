@@ -50,7 +50,7 @@ $unsubscribed_users = get_unsubscribed_users($conn);
       <?php include 'includes/sidebar.php'; ?>
 
         <!-- Main Content -->
-        <div class="col-md-10 p-4">
+        <div class="col-md-10 p-4 ms-lg-220">
             <h1 class="fw-bold">Overview</h1>
 
             <!-- Overview Cards -->

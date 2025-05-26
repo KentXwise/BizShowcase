@@ -1,11 +1,14 @@
 .sidebar {
-  height: 120vh;
+  height: 92vh;
   background: #fff;
   padding-top: 1rem;
   border-right: 1px solid #dee2e6;
   display: flex;
   flex-direction: column;
+  position: fixed;
+  top: 70px;
 }
+
 
 .sidebar-button {
   background-color: #f0f0f0;
@@ -28,13 +31,21 @@
 .sidebar-button img {
   margin-right: 10px;
 }
+@media (min-width: 992px) {
+  .ms-lg-220 {
+    margin-left: 260px;
+  }
+}
 
-@media (max-width: 992px) {
+@media (max-width: 1080px) {
   .sidebar-button {
     font-size: 0.95rem;
   }
   .btn {
     font-size: 0.8rem;
+  }
+  .sidebar{
+    width: 350px;
   }
 }
 @media (max-width: 400px) {

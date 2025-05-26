@@ -87,7 +87,7 @@ function is_user_suspended($user) {
   <?php include 'includes/sidebar.php'; ?>
 
   <!-- Main Content -->
-    <div class="col-md-10 p-4 ms-lg-220" style="overflow-x: auto;">
+    <div class="col-lg-10 content-area" style="overflow-x: auto;">
       <h1 class="fw-bold mb-4">Manage Accounts</h1>
       
 

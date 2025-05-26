@@ -55,7 +55,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['add_category'])) {
   <?php include 'includes/sidebar.php'; ?>
 
     <!-- Main Content -->
-    <main class="col-md-10 p-4 ms-lg-220">
+    <div class="col-lg-10 content-area">
       <h1 class="fw-bold mb-4">Category List</h1>
       <div class="content-card">
         <div class="d-flex justify-content-between align-items-center mb-3">

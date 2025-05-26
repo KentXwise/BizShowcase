@@ -1,12 +1,14 @@
 .sidebar {
-  height: 92vh;
-  background: #fff;
-  padding-top: 1rem;
-  border-right: 1px solid #dee2e6;
-  display: flex;
-  flex-direction: column;
   position: fixed;
-  top: 70px;
+  top: 70px; /* height of the navbar */
+  left: 0;
+  height: calc(100vh - 70px);
+  width: 220px;
+  background-color: #fff;
+  border-right: 1px solid #dee2e6;
+  padding-top: 1rem;
+  overflow-y: auto;
+  z-index: 1020;
 }
 
 
@@ -36,6 +38,7 @@
     margin-left: 260px;
   }
 }
+
 
 @media (max-width: 1080px) {
   .sidebar-button {

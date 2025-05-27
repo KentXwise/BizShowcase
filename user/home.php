@@ -11,8 +11,8 @@ if (!isset($_SESSION['user_id'])) {
 $categories = get_categories($conn);
 $posts = get_all_posts($conn);
 
-// Set current date and time (11:08 AM PST on Tuesday, May 27, 2025)
-$currentDateTime = new DateTime('2025-05-27 11:08:00', new DateTimeZone('America/Los_Angeles'));
+// Set current date and time (10:00 PM PST on Tuesday, May 27, 2025)
+$currentDateTime = new DateTime('2025-05-27 22:00:00', new DateTimeZone('America/Los_Angeles'));
 
 // Function to get counts for likes, favorites, and comments
 function get_post_counts($conn, $post_id) {
@@ -29,239 +29,225 @@ function get_post_counts($conn, $post_id) {
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <title>Home - BizShowcase</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-+0n0xVW2eSR5OomGNYDnhzAbDsOXxcvSN1TPprVMTNDbiYZCxYbOOl7+AMvyTG2x" crossorigin="anonymous">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
-    <link href="css/home.css" rel="stylesheet">
+    <link rel="stylesheet" href="css/sidebar.css">
+    <link rel="stylesheet" href="css/header.css">
+    <link rel="stylesheet" href="css/home.css">
     <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-gtEjrD/SeCtmISkJkNUaaKMoLD0//ElJ19smozuHV6z3Iehds+3Ulb9Bn9Plx0x4" crossorigin="anonymous"></script>
+    <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
 </head>
 <body>
-    <nav class="navbar navbar-expand-lg navbar-light bg-white">
-        <div class="container-fluid">
-            <a class="navbar-brand fw-bold" href="home.php">BizShowcase</a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav ms-auto">
-                    <li class="nav-item"><a class="nav-link active" href="home.php">Home</a></li>
-                    <li class="nav-item"><a class="nav-link" href="profile.php">Profile</a></li>
-                    <li class="nav-item"><a class="nav-link" href="settings.php">Settings</a></li>
-                    <li class="nav-item"><a class="nav-link" href="add-post.php">Add Post</a></li>
-                    <li class="nav-item"><a class="nav-link" href="subscription.php">Subscription</a></li>
-                    <li class="nav-item"><a class="nav-link" href="payment.php">Payment</a></li>
-                    <li class="nav-item"><a class="nav-link" href="logout.php">Logout</a></li>
-                </ul>
-            </div>
-        </div>
-    </nav>
-
-    <div class="container mt-4">
-        <div class="row">
-            <!-- Filter Sidebar -->
-            <div class="col-md-3">
-                <div class="card filter-card">
-                    <div class="card-body">
-                        <h5 class="card-title">Filters</h5>
-                        <div class="mb-3">
-                            <label for="categoryFilter" class="form-label">Category</label>
-                            <select id="categoryFilter" class="form-select" aria-label="Filter by category">
-                                <option value="">All Categories</option>
-                                <?php foreach ($categories as $category): ?>
-                                    <option value="<?php echo $category['category_id']; ?>">
-                                        <?php echo htmlspecialchars($category['category_name']); ?>
-                                    </option>
-                                <?php endforeach; ?>
-                            </select>
-                        </div>
-                        <div>
-                            <label for="searchUser" class="form-label">Search Users</label>
-                            <div class="input-group">
-                                <input type="text" id="searchUser" class="form-control" placeholder="Search users..." aria-label="Search users">
-                                <span class="input-group-text"><i class="fas fa-search"></i></span>
-                            </div>
-                        </div>
+    <?php include 'header.php'; ?>
+    <?php include 'sidebar.php'; ?>
+    <div class="sidebar-overlay"></div>
+    <div class="main-content">
+        <div class="container mt-4">
+            <!-- Search Bar Section -->
+            <div class="search-bar-section mb-4">
+                <div class="search-bar-container">
+                    <div class="search-bar input-group">
+                        <input type="text" id="searchUser" class="form-control" placeholder="Search users..." aria-label="Search users">
+                        <span class="input-group-text"><i class="fas fa-search"></i></span>
                     </div>
                 </div>
             </div>
+
             <!-- Posts Section -->
-            <div class="col-md-9">
-                <div class="d-flex justify-content-between align-items-center mb-4">
-                    <h2>Business Posts</h2>
-                    <span class="text-muted small"><?php echo $currentDateTime->format('l, F j, Y g:i A T'); ?></span>
-                </div>
-                <div id="postsContainer" class="row">
-                    <?php foreach ($posts as $post): ?>
-                        <?php 
-                        $counts = get_post_counts($conn, $post['post_id']);
-                        $images = get_post_images($conn, $post['post_id']);
-                        $stmt = $conn->prepare("SELECT COUNT(*) FROM likes WHERE post_id = ? AND user_id = ?");
-                        $stmt->execute([$post['post_id'], $_SESSION['user_id']]);
-                        $has_liked = $stmt->fetchColumn() > 0;
-                        $stmt = $conn->prepare("SELECT COUNT(*) FROM favorites WHERE post_id = ? AND user_id = ?");
-                        $stmt->execute([$post['post_id'], $_SESSION['user_id']]);
-                        $has_favorited = $stmt->fetchColumn() > 0;
-                        ?>
-                        <div class="col-md-6 col-lg-4 mb-4">
-                            <div class="card post-card" data-post-id="<?php echo $post['post_id']; ?>">
-                                <?php if (!empty($images)): ?>
-                                    <div class="post-images-container">
-                                        <img src="../<?php echo htmlspecialchars($images[0]['image_path']); ?>" 
-                                             class="post-image" 
-                                             alt="Post image for <?php echo htmlspecialchars($post['company_name']); ?>" 
-                                             data-bs-toggle="modal" 
-                                             data-bs-target="#postModal-<?php echo $post['post_id']; ?>" 
-                                             loading="lazy">
-                                    </div>
-                                <?php else: ?>
-                                    <div class="post-images-container text-muted text-center py-3">No images available</div>
-                                <?php endif; ?>
-                                <div class="card-body">
-                                    <h5 class="card-title"><?php echo htmlspecialchars($post['company_name']); ?></h5>
-                                    <p class="card-text"><?php echo htmlspecialchars(substr($post['description'], 0, 100)) . (strlen($post['description']) > 100 ? '...' : ''); ?></p>
-                                    <div class="post-stats">
-                                        <span><i class="fas fa-thumbs-up"></i> <span class="like-count"><?php echo $counts['like_count']; ?></span></span>
-                                        <span><i class="fas fa-star"></i> <span class="favorite-count"><?php echo $counts['favorite_count']; ?></span></span>
-                                        <span><i class="fas fa-comment"></i> <span class="comment-count"><?php echo $counts['comment_count']; ?></span></span>
-                                    </div>
-                                    <div class="d-flex gap-2 mb-3">
-                                        <button class="btn btn-outline-primary action-btn like-btn" 
-                                                data-post-id="<?php echo $post['post_id']; ?>" 
-                                                <?php echo $has_liked ? 'disabled' : ''; ?>
-                                                aria-label="<?php echo $has_liked ? 'Liked' : 'Like'; ?> post">
-                                            <i class="fas fa-thumbs-up"></i> <?php echo $has_liked ? 'Liked' : 'Like'; ?>
-                                        </button>
-                                        <button class="btn btn-outline-success action-btn favorite-btn" 
-                                                data-post-id="<?php echo $post['post_id']; ?>" 
-                                                <?php echo $has_favorited ? 'disabled' : ''; ?>
-                                                aria-label="<?php echo $has_favorited ? 'Favorited' : 'Favorite'; ?> post">
-                                            <i class="fas fa-star"></i> <?php echo $has_favorited ? 'Favorited' : 'Favorite'; ?>
-                                        </button>
-                                        <button class="btn btn-outline-info action-btn follow-btn" 
-                                                data-user-id="<?php echo $post['user_id']; ?>"
-                                                aria-label="Follow user">
-                                            <i class="fas fa-user-plus"></i> Follow
-                                        </button>
-                                    </div>
-                                    <div>
-                                        <textarea class="form-control comment-text" 
-                                                  placeholder="Add a comment..." 
-                                                  aria-label="Comment input for post <?php echo $post['post_id']; ?>"></textarea>
-                                        <button class="btn comment-btn mt-2 comment-btn" 
-                                                data-post-id="<?php echo $post['post_id']; ?>"
-                                                aria-label="Submit comment">
-                                            Comment
-                                        </button>
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="d-flex justify-content-between align-items-center mb-4">
+                        <h2>Business Posts</h2>
+                        <div class="category-dropdown">
+                            <div class="dropdown">
+                                <button class="btn dropdown-toggle" type="button" id="categoryDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                                    Select Category
+                                </button>
+                                <ul class="dropdown-menu" aria-labelledby="categoryDropdown">
+                                    <li><a class="dropdown-item" href="#" data-category="">All Categories</a></li>
+                                    <?php foreach ($categories as $category): ?>
+                                        <li><a class="dropdown-item" href="#" data-category="<?php echo $category['category_id']; ?>">
+                                            <?php echo htmlspecialchars($category['category_name']); ?>
+                                        </a></li>
+                                    <?php endforeach; ?>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="postsContainer" class="row">
+                        <?php foreach ($posts as $post): ?>
+                            <?php 
+                            $counts = get_post_counts($conn, $post['post_id']);
+                            $images = get_post_images($conn, $post['post_id']);
+                            $stmt = $conn->prepare("SELECT COUNT(*) FROM likes WHERE post_id = ? AND user_id = ?");
+                            $stmt->execute([$post['post_id'], $_SESSION['user_id']]);
+                            $has_liked = $stmt->fetchColumn() > 0;
+                            $stmt = $conn->prepare("SELECT COUNT(*) FROM favorites WHERE post_id = ? AND user_id = ?");
+                            $stmt->execute([$post['post_id'], $_SESSION['user_id']]);
+                            $has_favorited = $stmt->fetchColumn() > 0;
+                            ?>
+                            <div class="col-md-6 col-lg-4 mb-4">
+                                <div class="card post-card" data-post-id="<?php echo $post['post_id']; ?>">
+                                    <?php if (!empty($images)): ?>
+                                        <div class="post-images-container">
+                                            <img src="../<?php echo htmlspecialchars($images[0]['image_path']); ?>" 
+                                                 class="post-image" 
+                                                 alt="Post image for <?php echo htmlspecialchars($post['company_name']); ?>" 
+                                                 data-bs-toggle="modal" 
+                                                 data-bs-target="#postModal-<?php echo $post['post_id']; ?>" 
+                                                 loading="lazy">
+                                        </div>
+                                    <?php else: ?>
+                                        <div class="post-images-container text-muted text-center py-3">No images available</div>
+                                    <?php endif; ?>
+                                    <div class="card-body">
+                                        <h5 class="card-title"><?php echo htmlspecialchars($post['company_name']); ?></h5>
+                                        <p class="card-text"><?php echo htmlspecialchars(substr($post['description'], 0, 100)) . (strlen($post['description']) > 100 ? '...' : ''); ?></p>
+                                        <div class="post-stats">
+                                            <span><i class="fas fa-thumbs-up"></i> <span class="like-count"><?php echo $counts['like_count']; ?></span></span>
+                                            <span><i class="fas fa-star"></i> <span class="favorite-count"><?php echo $counts['favorite_count']; ?></span></span>
+                                            <span><i class="fas fa-comment"></i> <span class="comment-count"><?php echo $counts['comment_count']; ?></span></span>
+                                        </div>
+                                        <div class="d-flex gap-2 mb-3">
+                                            <button class="btn btn-outline-primary action-btn like-btn" 
+                                                    data-post-id="<?php echo $post['post_id']; ?>" 
+                                                    <?php echo $has_liked ? 'disabled' : ''; ?>
+                                                    aria-label="<?php echo $has_liked ? 'Liked' : 'Like'; ?> post">
+                                                <i class="fas fa-thumbs-up"></i> <?php echo $has_liked ? 'Liked' : 'Like'; ?>
+                                            </button>
+                                            <button class="btn btn-outline-success action-btn favorite-btn" 
+                                                    data-post-id="<?php echo $post['post_id']; ?>" 
+                                                    <?php echo $has_favorited ? 'disabled' : ''; ?>
+                                                    aria-label="<?php echo $has_favorited ? 'Favorited' : 'Favorite'; ?> post">
+                                                <i class="fas fa-star"></i> <?php echo $has_favorited ? 'Favorited' : 'Favorite'; ?>
+                                            </button>
+                                            <button class="btn btn-outline-info action-btn follow-btn" 
+                                                    data-user-id="<?php echo $post['user_id']; ?>"
+                                                    aria-label="Follow user">
+                                                <i class="fas fa-user-plus"></i> Follow
+                                            </button>
+                                        </div>
+                                        <div>
+                                            <textarea class="form-control comment-text" 
+                                                      placeholder="Add a comment..." 
+                                                      aria-label="Comment input for post <?php echo $post['post_id']; ?>"></textarea>
+                                            <button class="btn comment-btn mt-2 comment-btn" 
+                                                    data-post-id="<?php echo $post['post_id']; ?>"
+                                                    aria-label="Submit comment">
+                                                Comment
+                                            </button>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
 
-                            <!-- Post Modal (Updated with Two-Column Layout) -->
-                            <div class="modal fade" id="postModal-<?php echo $post['post_id']; ?>" tabindex="-1" aria-labelledby="postModalLabel-<?php echo $post['post_id']; ?>" aria-hidden="true">
-                                <div class="modal-dialog modal-xl">
-                                    <div class="modal-content">
-                                        <div class="modal-header">
-                                            <h5 class="modal-title" id="postModalLabel-<?php echo $post['post_id']; ?>">
-                                                <?php echo htmlspecialchars($post['company_name']); ?>
-                                            </h5>
-                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                        </div>
-                                        <div class="modal-body">
-                                            <div class="row g-0">
-                                                <div class="col-md-8">
-                                                    <?php if (!empty($images)): ?>
-                                                        <div id="carousel-<?php echo $post['post_id']; ?>" class="carousel slide">
-                                                            <div class="carousel-inner">
-                                                                <?php foreach ($images as $index => $image): ?>
-                                                                    <div class="carousel-item <?php echo $index === 0 ? 'active' : ''; ?>">
-                                                                        <img src="../<?php echo htmlspecialchars($image['image_path']); ?>" 
-                                                                             class="d-block w-100" 
-                                                                             alt="Image <?php echo $index + 1; ?> for <?php echo htmlspecialchars($post['company_name']); ?>" 
-                                                                             loading="lazy">
-                                                                    </div>
-                                                                <?php endforeach; ?>
+                                <!-- Post Modal -->
+                                <div class="modal fade" id="postModal-<?php echo $post['post_id']; ?>" tabindex="-1" aria-labelledby="postModalLabel-<?php echo $post['post_id']; ?>" aria-hidden="true">
+                                    <div class="modal-dialog modal-xl">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title" id="postModalLabel-<?php echo $post['post_id']; ?>">
+                                                    <?php echo htmlspecialchars($post['company_name']); ?>
+                                                </h5>
+                                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                            </div>
+                                            <div class="modal-body">
+                                                <div class="row g-0">
+                                                    <div class="col-md-8">
+                                                        <?php if (!empty($images)): ?>
+                                                            <div id="carousel-<?php echo $post['post_id']; ?>" class="carousel slide">
+                                                                <div class="carousel-inner">
+                                                                    <?php foreach ($images as $index => $image): ?>
+                                                                        <div class="carousel-item <?php echo $index === 0 ? 'active' : ''; ?>">
+                                                                            <img src="../<?php echo htmlspecialchars($image['image_path']); ?>" 
+                                                                                 class="d-block w-100" 
+                                                                                 alt="Image <?php echo $index + 1; ?> for <?php echo htmlspecialchars($post['company_name']); ?>" 
+                                                                                 loading="lazy">
+                                                                        </div>
+                                                                    <?php endforeach; ?>
+                                                                </div>
+                                                                <?php if (count($images) > 1): ?>
+                                                                    <button class="carousel-control-prev" type="button" 
+                                                                            data-bs-target="#carousel-<?php echo $post['post_id']; ?>" 
+                                                                            data-bs-slide="prev" 
+                                                                            aria-label="Previous image">
+                                                                        <span class="carousel-control-prev-icon"></span>
+                                                                    </button>
+                                                                    <button class="carousel-control-next" type="button" 
+                                                                            data-bs-target="#carousel-<?php echo $post['post_id']; ?>" 
+                                                                            data-bs-slide="next" 
+                                                                            aria-label="Next image">
+                                                                        <span class="carousel-control-next-icon"></span>
+                                                                    </button>
+                                                                <?php endif; ?>
                                                             </div>
-                                                            <?php if (count($images) > 1): ?>
-                                                                <button class="carousel-control-prev" type="button" 
-                                                                        data-bs-target="#carousel-<?php echo $post['post_id']; ?>" 
-                                                                        data-bs-slide="prev" 
-                                                                        aria-label="Previous image">
-                                                                    <span class="carousel-control-prev-icon"></span>
+                                                        <?php else: ?>
+                                                            <p class="text-muted">No images available.</p>
+                                                        <?php endif; ?>
+                                                        <div class="modal-post-content">
+                                                            <p><?php echo htmlspecialchars($post['description']); ?></p>
+                                                            <div class="modal-post-stats">
+                                                                <span><i class="fas fa-thumbs-up"></i> <span class="like-count"><?php echo $counts['like_count']; ?></span></span>
+                                                                <span><i class="fas fa-star"></i> <span class="favorite-count"><?php echo $counts['favorite_count']; ?></span></span>
+                                                                <span><i class="fas fa-comment"></i> <span class="comment-count"><?php echo $counts['comment_count']; ?></span></span>
+                                                            </div>
+                                                            <div class="d-flex gap-2 mb-3">
+                                                                <button class="btn btn-outline-primary action-btn like-btn" 
+                                                                        data-post-id="<?php echo $post['post_id']; ?>" 
+                                                                        <?php echo $has_liked ? 'disabled' : ''; ?>
+                                                                        aria-label="<?php echo $has_liked ? 'Liked' : 'Like'; ?> post">
+                                                                    <i class="fas fa-thumbs-up"></i> <?php echo $has_liked ? 'Liked' : 'Like'; ?>
                                                                 </button>
-                                                                <button class="carousel-control-next" type="button" 
-                                                                        data-bs-target="#carousel-<?php echo $post['post_id']; ?>" 
-                                                                        data-bs-slide="next" 
-                                                                        aria-label="Next image">
-                                                                    <span class="carousel-control-next-icon"></span>
+                                                                <button class="btn btn-outline-success action-btn favorite-btn" 
+                                                                        data-post-id="<?php echo $post['post_id']; ?>" 
+                                                                        <?php echo $has_favorited ? 'disabled' : ''; ?>
+                                                                        aria-label="<?php echo $has_favorited ? 'Favorited' : 'Favorite'; ?> post">
+                                                                    <i class="fas fa-star"></i> <?php echo $has_favorited ? 'Favorited' : 'Favorite'; ?>
                                                                 </button>
-                                                            <?php endif; ?>
-                                                        </div>
-                                                    <?php else: ?>
-                                                        <p class="text-muted">No images available.</p>
-                                                    <?php endif; ?>
-                                                    <div class="modal-post-content">
-                                                        <p><?php echo htmlspecialchars($post['description']); ?></p>
-                                                        <div class="modal-post-stats">
-                                                            <span><i class="fas fa-thumbs-up"></i> <span class="like-count"><?php echo $counts['like_count']; ?></span></span>
-                                                            <span><i class="fas fa-star"></i> <span class="favorite-count"><?php echo $counts['favorite_count']; ?></span></span>
-                                                            <span><i class="fas fa-comment"></i> <span class="comment-count"><?php echo $counts['comment_count']; ?></span></span>
-                                                        </div>
-                                                        <div class="d-flex gap-2 mb-3">
-                                                            <button class="btn btn-outline-primary action-btn like-btn" 
-                                                                    data-post-id="<?php echo $post['post_id']; ?>" 
-                                                                    <?php echo $has_liked ? 'disabled' : ''; ?>
-                                                                    aria-label="<?php echo $has_liked ? 'Liked' : 'Like'; ?> post">
-                                                                <i class="fas fa-thumbs-up"></i> <?php echo $has_liked ? 'Liked' : 'Like'; ?>
-                                                            </button>
-                                                            <button class="btn btn-outline-success action-btn favorite-btn" 
-                                                                    data-post-id="<?php echo $post['post_id']; ?>" 
-                                                                    <?php echo $has_favorited ? 'disabled' : ''; ?>
-                                                                    aria-label="<?php echo $has_favorited ? 'Favorited' : 'Favorite'; ?> post">
-                                                                <i class="fas fa-star"></i> <?php echo $has_favorited ? 'Favorited' : 'Favorite'; ?>
-                                                            </button>
-                                                            <button class="btn btn-outline-info action-btn follow-btn" 
-                                                                    data-user-id="<?php echo $post['user_id']; ?>"
-                                                                    aria-label="Follow user">
-                                                                <i class="fas fa-user-plus"></i> Follow
-                                                            </button>
+                                                                <button class="btn btn-outline-info action-btn follow-btn" 
+                                                                        data-user-id="<?php echo $post['user_id']; ?>"
+                                                                        aria-label="Follow user">
+                                                                    <i class="fas fa-user-plus"></i> Follow
+                                                                </button>
+                                                            </div>
                                                         </div>
                                                     </div>
-                                                </div>
-                                                <div class="col-md-4">
-                                                    <div class="comments-panel">
-                                                        <button class="btn btn-outline-primary show-comments-btn" 
-                                                                data-post-id="<?php echo $post['post_id']; ?>"
-                                                                aria-expanded="false"
-                                                                aria-controls="comments-section-<?php echo $post['post_id']; ?>">
-                                                            Show Comments
-                                                        </button>
-                                                        <div class="comments-section" id="comments-section-<?php echo $post['post_id']; ?>" style="display: none;">
-                                                            <h6>Comments</h6>
-                                                            <div class="comments-list"></div>
+                                                    <div class="col-md-4">
+                                                        <div class="comments-panel">
+                                                            <button class="btn btn-outline-primary show-comments-btn" 
+                                                                    data-post-id="<?php echo $post['post_id']; ?>"
+                                                                    aria-expanded="false"
+                                                                    aria-controls="comments-section-<?php echo $post['post_id']; ?>">
+                                                                Show Comments
+                                                            </button>
+                                                            <div class="comments-section" id="comments-section-<?php echo $post['post_id']; ?>" style="display: none;">
+                                                                <h6>Comments</h6>
+                                                                <div class="comments-list"></div>
+                                                            </div>
                                                         </div>
                                                     </div>
                                                 </div>
                                             </div>
-                                        </div>
-                                        <div class="modal-footer">
-                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" aria-label="Close modal">Close</button>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" aria-label="Close modal">Close</button>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
-                    <?php endforeach; ?>
+                        <?php endforeach; ?>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
 
-    <!-- Toast Container -->
-    <div class="toast-container position-fixed bottom-0 end-0 p-3">
-        <div id="actionToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
-            <div class="toast-body"></div>
+        <!-- Toast Container -->
+        <div class="toast-container position-fixed bottom-0 end-0 p-3">
+            <div id="actionToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+                <div class="toast-body"></div>
+            </div>
         </div>
     </div>
 
@@ -451,9 +437,12 @@ function get_post_counts($conn, $post_id) {
             fetchPostCounts();
 
             // Filter posts by category
-            $('#categoryFilter').change(function() {
-                let categoryId = $(this).val();
-                showLoading($(this), true);
+            $('#categoryDropdown .dropdown-item').on('click', function(e) {
+                e.preventDefault();
+                let $this = $(this);
+                let categoryId = $this.data('category');
+                $('#categoryDropdown .dropdown-toggle').text($this.text());
+                showLoading($('#categoryDropdown .dropdown-toggle'), true);
                 $.ajax({
                     url: '../ajax/user_actions.php',
                     method: 'POST',
@@ -468,7 +457,7 @@ function get_post_counts($conn, $post_id) {
                         showToast('Failed to filter posts.');
                     },
                     complete: function() {
-                        showLoading($('#categoryFilter'), false);
+                        showLoading($('#categoryDropdown .dropdown-toggle'), false);
                     }
                 });
             });
@@ -491,7 +480,7 @@ function get_post_counts($conn, $post_id) {
                         showToast('Failed to search users.');
                     },
                     complete: function() {
-                        showLoading($('#searchUser'), false);
+                        showLoading($(this), false);
                     }
                 });
             });
@@ -690,6 +679,22 @@ function get_post_counts($conn, $post_id) {
                         }
                     });
                 }
+            });
+
+            // Hide sidebar when modal is shown
+            $('.modal').on('show.bs.modal', function () {
+                $('.sidebar').hide();
+                $('.sidebar-overlay').hide();
+            });
+
+            // Show sidebar when modal is hidden
+            $('.modal').on('hidden.bs.modal', function () {
+                if (window.innerWidth > 991) {
+                    $('.sidebar').show();
+                } else if ($('.toggle-btn').is(':visible')) {
+                    $('.sidebar').show();
+                }
+                $('.sidebar-overlay').show();
             });
 
             // Toast notification function

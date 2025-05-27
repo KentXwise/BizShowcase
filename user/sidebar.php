@@ -21,7 +21,7 @@
         <a href="add-post.php"><i class="fas fa-plus-circle icon"></i><span class="link-text">Add Post</span></a>
         <a href="subscription.php"><i class="fas fa-credit-card icon"></i><span class="link-text">Subscription</span></a>
         <a href="payment.php"><i class="fas fa-wallet icon"></i><span class="link-text">Payment</span></a>
-        <a href="../index.php"><i class="fas fa-sign-out-alt icon"></i><span class="link-text">Log Out</span></a>
+        <a href="index.php"><i class="fas fa-sign-out-alt icon"></i><span class="link-text">Log Out</span></a>
     </nav>
 </aside>
 
@@ -32,10 +32,27 @@
     function toggleSidebar() {
         const sidebar = document.getElementById('sidebar');
         const overlay = document.querySelector('.sidebar-overlay');
-        // Removed classList.toggle('collapsed') to prevent collapse
-        sidebar.classList.add('show'); // Ensure sidebar is always shown
-        overlay.style.display = window.innerWidth <= 991 ? 'block' : 'none';
-        localStorage.setItem('sidebarCollapsed', 'false'); // Set to false to maintain expanded state
+        const isCollapsed = sidebar.classList.contains('collapsed');
+
+        if (window.innerWidth > 991) {
+            // Desktop: Toggle between collapsed and expanded
+            sidebar.classList.toggle('collapsed');
+            localStorage.setItem('sidebarCollapsed', !isCollapsed);
+            overlay.style.display = 'none'; // Overlay not needed on desktop
+        } else {
+            // Mobile: Toggle visibility
+            if (sidebar.classList.contains('show')) {
+                sidebar.classList.remove('show');
+                sidebar.classList.add('collapsed');
+                overlay.style.display = 'none';
+                localStorage.setItem('sidebarCollapsed', 'true');
+            } else {
+                sidebar.classList.add('show');
+                sidebar.classList.remove('collapsed');
+                overlay.style.display = 'block';
+                localStorage.setItem('sidebarCollapsed', 'false');
+            }
+        }
     }
 
     function initializeSidebar() {
@@ -44,23 +61,24 @@
         const isCollapsed = localStorage.getItem('sidebarCollapsed') === 'true';
 
         if (window.innerWidth > 991) {
-            // Desktop: Default to expanded
+            // Desktop: Respect stored state
             sidebar.classList.add('show');
-            sidebar.classList.remove('collapsed');
+            if (isCollapsed) {
+                sidebar.classList.add('collapsed');
+            } else {
+                sidebar.classList.remove('collapsed');
+            }
             overlay.style.display = 'none';
         } else {
             // Mobile: Hidden by default unless explicitly shown
-            if (isCollapsed) {
+            if (isCollapsed || !sidebar.classList.contains('show')) {
                 sidebar.classList.add('collapsed');
                 sidebar.classList.remove('show');
                 overlay.style.display = 'none';
-            } else if (sidebar.classList.contains('show')) {
-                sidebar.classList.remove('collapsed');
-                overlay.style.display = 'block';
             } else {
-                sidebar.classList.add('collapsed');
-                sidebar.classList.remove('show');
-                overlay.style.display = 'none';
+                sidebar.classList.remove('collapsed');
+                sidebar.classList.add('show');
+                overlay.style.display = 'block';
             }
         }
     }
@@ -71,18 +89,18 @@
         toggleSidebar();
     });
 
-    // Prevent sidebar links from collapsing sidebar
+    // Handle sidebar links (do not collapse on click, just navigate)
     document.querySelectorAll('.sidebar a').forEach(link => {
         link.addEventListener('click', (e) => {
             e.stopPropagation();
-            const sidebar = document.getElementById('sidebar');
-            const overlay = document.querySelector('.sidebar-overlay');
-            // Ensure sidebar stays expanded
-            sidebar.classList.add('show');
-            sidebar.classList.remove('collapsed');
-            localStorage.setItem('sidebarCollapsed', 'false');
+            // On mobile, close the sidebar after clicking a link
             if (window.innerWidth <= 991) {
-                overlay.style.display = 'block';
+                const sidebar = document.getElementById('sidebar');
+                const overlay = document.querySelector('.sidebar-overlay');
+                sidebar.classList.remove('show');
+                sidebar.classList.add('collapsed');
+                overlay.style.display = 'none';
+                localStorage.setItem('sidebarCollapsed', 'true');
             }
         });
     });

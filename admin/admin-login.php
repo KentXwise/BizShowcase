@@ -40,10 +40,32 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <!-- Custom CSS -->
     <link rel="stylesheet" href="../assets/css/admin_styles.css">
 </head>
+<style>
+    body {
+        opacity: 0;
+        transition: opacity 0.8s ease, transform 0.9s ease;
+        transform: translateX(0);
+    }
+
+    body.page-loaded {
+        opacity: 1;
+    }
+
+    body.slide-left {
+        opacity: 0;
+        transform: translateX(-100%);
+    }
+
+    body.slide-right {
+        opacity: 0;
+        transform: translateX(100%);
+    }
+</style>
+
 <body style="background-color: #f8f9fc;">
-        <div class="d-flex min-vh-100">
+        <div class="container-fluid min-vh-100 d-flex flex-column flex-lg-row p-0">
             <!-- Left: Form Section -->
-            <div class="col-lg-6 d-flex align-items-center justify-content-center p-5">
+            <div class="col-lg-6 d-flex align-items-center justify-content-center p-5 flex-grow-1">
                 <div class="w-100" style="max-width: 480px;">
                     <div class="text-center mb-4">
                         <h3 class="fw-bold mt-2">BizShowcase</h3>
@@ -73,7 +95,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             </div>
 
             <!-- Right Illustration -->
-            <div class="col-md-6 d-none d-md-flex align-items-center justify-content-center text-white" style="background: linear-gradient(to right, #6a11cb, #2575fc);">
+            <div class="col-lg-6 d-none d-lg-flex align-items-center justify-content-center text-white flex-grow-1" style="background: linear-gradient(to right, #6a11cb, #2575fc);">
                 <div class="text-center px-4">
                     <img src="../assets/img/Background 1.png" class="img-fluid mb-4" alt="Handshake" style="max-height: 300px;">
                     <h4 class="fw-bold">Connect with businesses worldwide</h4>
@@ -85,20 +107,32 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <script>
 document.addEventListener("DOMContentLoaded", function () {
     const body = document.body;
-    body.classList.add('page-transition');
+    body.classList.add("page-loaded");
 
     const links = document.querySelectorAll("a[href='admin-login.php'], a[href='admin-signup.php']");
     links.forEach(link => {
         link.addEventListener("click", function (e) {
             e.preventDefault();
-            body.classList.add("page-transition-exit");
+            const href = link.getAttribute("href");
+
+            // Determine direction of slide
+            if (href.includes("signup")) {
+                body.classList.add("slide-right");
+            } else {
+                body.classList.add("slide-left");
+            }
+
             setTimeout(() => {
-                window.location.href = link.getAttribute("href");
-            }, 500); // matches the CSS transition
+                window.location.href = href;
+            }, 500); // must match CSS duration
         });
     });
 });
 </script>
+
+<!-- done boss -->
+
+
 
 
 

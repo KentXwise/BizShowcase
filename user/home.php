@@ -11,8 +11,8 @@ if (!isset($_SESSION['user_id'])) {
 $categories = get_categories($conn);
 $posts = get_all_posts($conn);
 
-// Set current date and time (10:00 PM PST on Tuesday, May 27, 2025)
-$currentDateTime = new DateTime('2025-05-27 22:00:00', new DateTimeZone('America/Los_Angeles'));
+// Set current date and time (02:21 AM PST on Wednesday, May 28, 2025)
+$currentDateTime = new DateTime('2025-05-28 02:21:00', new DateTimeZone('America/Los_Angeles'));
 
 // Function to get counts for likes, favorites, and comments
 function get_post_counts($conn, $post_id) {
@@ -29,53 +29,47 @@ function get_post_counts($conn, $post_id) {
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Home - BizShowcase</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-+0n0xVW2eSR5OomGNYDnhzAbDsOXxcvSN1TPprVMTNDbiYZCxYbOOl7+AMvyTG2x" crossorigin="anonymous">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="css/sidebar.css">
-    <link rel="stylesheet" href="css/header.css">
-    <link rel="stylesheet" href="css/home.css">
+    <link href="css/home.css" rel="stylesheet">
     <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-gtEjrD/SeCtmISkJkNUaaKMoLD0//ElJ19smozuHV6z3Iehds+3Ulb9Bn9Plx0x4" crossorigin="anonymous"></script>
-    <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </head>
 <body>
-    <?php include 'header.php'; ?>
     <?php include 'sidebar.php'; ?>
-    <div class="sidebar-overlay"></div>
+    <?php include 'header.php'; ?>
+
+    <!-- Main Content -->
     <div class="main-content">
-        <div class="container mt-4">
-            <!-- Search Bar Section -->
-            <div class="search-bar-section mb-4">
-                <div class="search-bar-container">
-                    <div class="search-bar input-group">
-                        <input type="text" id="searchUser" class="form-control" placeholder="Search users..." aria-label="Search users">
-                        <span class="input-group-text"><i class="fas fa-search"></i></span>
-                    </div>
+        <!-- Search Bar and Category Dropdown -->
+        <div class="search-bar-section">
+            <div class="search-bar-container">
+                <div class="input-group search-bar" style="max-width: 500px; width: 100%;">
+                    <input type="text" id="searchUser" class="form-control" placeholder="Search users..." aria-label="Search users">
+                    <span class="input-group-text"><i class="fas fa-search"></i></span>
+                </div>
+                <div class="category-dropdown" style="min-width: 150px;">
+                    <select id="categoryFilter" class="form-select" aria-label="Filter by category">
+                        <option value="">Select Category</option>
+                        <?php foreach ($categories as $category): ?>
+                            <option value="<?php echo $category['category_id']; ?>">
+                                <?php echo htmlspecialchars($category['category_name']); ?>
+                            </option>
+                        <?php endforeach; ?>
+                    </select>
                 </div>
             </div>
+        </div>
 
-            <!-- Posts Section -->
+        <!-- Posts Section -->
+        <div class="container posts-container">
             <div class="row">
                 <div class="col-md-12">
                     <div class="d-flex justify-content-between align-items-center mb-4">
                         <h2>Business Posts</h2>
-                        <div class="category-dropdown">
-                            <div class="dropdown">
-                                <button class="btn dropdown-toggle" type="button" id="categoryDropdown" data-bs-toggle="dropdown" aria-expanded="false">
-                                    Select Category
-                                </button>
-                                <ul class="dropdown-menu" aria-labelledby="categoryDropdown">
-                                    <li><a class="dropdown-item" href="#" data-category="">All Categories</a></li>
-                                    <?php foreach ($categories as $category): ?>
-                                        <li><a class="dropdown-item" href="#" data-category="<?php echo $category['category_id']; ?>">
-                                            <?php echo htmlspecialchars($category['category_name']); ?>
-                                        </a></li>
-                                    <?php endforeach; ?>
-                                </ul>
-                            </div>
-                        </div>
+                        <span class="text-muted small"><?php echo $currentDateTime->format('l, F j, Y g:i A T'); ?></span>
                     </div>
                     <div id="postsContainer" class="row">
                         <?php foreach ($posts as $post): ?>
@@ -242,12 +236,12 @@ function get_post_counts($conn, $post_id) {
                 </div>
             </div>
         </div>
+    </div>
 
-        <!-- Toast Container -->
-        <div class="toast-container position-fixed bottom-0 end-0 p-3">
-            <div id="actionToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
-                <div class="toast-body"></div>
-            </div>
+    <!-- Toast Container -->
+    <div class="toast-container position-fixed bottom-0 end-0 p-3">
+        <div id="actionToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+            <div class="toast-body"></div>
         </div>
     </div>
 
@@ -437,12 +431,9 @@ function get_post_counts($conn, $post_id) {
             fetchPostCounts();
 
             // Filter posts by category
-            $('#categoryDropdown .dropdown-item').on('click', function(e) {
-                e.preventDefault();
-                let $this = $(this);
-                let categoryId = $this.data('category');
-                $('#categoryDropdown .dropdown-toggle').text($this.text());
-                showLoading($('#categoryDropdown .dropdown-toggle'), true);
+            $('#categoryFilter').change(function() {
+                let categoryId = $(this).val();
+                showLoading($(this), true);
                 $.ajax({
                     url: '../ajax/user_actions.php',
                     method: 'POST',
@@ -457,7 +448,7 @@ function get_post_counts($conn, $post_id) {
                         showToast('Failed to filter posts.');
                     },
                     complete: function() {
-                        showLoading($('#categoryDropdown .dropdown-toggle'), false);
+                        showLoading($('#categoryFilter'), false);
                     }
                 });
             });
@@ -480,7 +471,7 @@ function get_post_counts($conn, $post_id) {
                         showToast('Failed to search users.');
                     },
                     complete: function() {
-                        showLoading($(this), false);
+                        showLoading($('#searchUser'), false);
                     }
                 });
             });
@@ -679,22 +670,6 @@ function get_post_counts($conn, $post_id) {
                         }
                     });
                 }
-            });
-
-            // Hide sidebar when modal is shown
-            $('.modal').on('show.bs.modal', function () {
-                $('.sidebar').hide();
-                $('.sidebar-overlay').hide();
-            });
-
-            // Show sidebar when modal is hidden
-            $('.modal').on('hidden.bs.modal', function () {
-                if (window.innerWidth > 991) {
-                    $('.sidebar').show();
-                } else if ($('.toggle-btn').is(':visible')) {
-                    $('.sidebar').show();
-                }
-                $('.sidebar-overlay').show();
             });
 
             // Toast notification function

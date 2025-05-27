@@ -1,0 +1,258 @@
+
+:root {
+  --primary-blue: #03045e;
+  --hover-blue: #005f8a;
+  --icon-color: #03045e;
+  --background-gray: #f0f2f5;
+  --white: #ffffff;
+  --text-dark: #343a40;
+  --light-gray: #dee2e6;
+  --blue-1: #03045e;
+}
+
+/* Reset */
+body {
+  margin: 0;
+  font-family: "Poppins", sans-serif;
+  background: var(--background-gray);
+  overflow-x: hidden;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+.logo-container {
+  max-width: 50px;
+  width: 100%;
+  margin-left: 10px;
+}
+
+.logo {
+  width: 100%;
+  height: auto;
+  object-fit: contain;
+}
+
+.toggle-btn-mobile {
+  background: none;
+  border: none;
+  color: var(--white);
+  font-size: 1.8rem;
+  cursor: pointer;
+  margin-right: 10px;
+  display: flex;
+}
+
+.sidebar {
+  position: fixed;
+  top: 80px;
+  left: 0;
+  width: 250px;
+  height: calc(100vh - 80px);
+  background: var(--white);
+  border-right: 1px solid var(--light-gray);
+  transition: transform 0.3s ease, width 0.3s ease;
+  overflow-x: hidden;
+  z-index: 1050;
+  transform: translateX(-100%);
+}
+
+.sidebar,
+.sidebar-overlay {
+  will-change: transform, opacity;
+}
+
+.sidebar a.active {
+  background-color: var(--light-gray);
+  color: var(--primary-blue);
+  font-weight: 600;
+}
+
+.sidebar a.active .icon {
+  color: var(--primary-blue);
+}
+
+.sidebar a,
+.toggle-btn {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  height: 48px;
+  padding: 12px 20px;
+  color: var(--text-dark);
+  text-decoration: none;
+  font-size: clamp(0.9rem, 2vw, 1rem);
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  text-align: left;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.toggle-btn i,
+.sidebar .icon {
+  min-width: 30px;
+  text-align: center;
+  font-size: clamp(1.2rem, 3vw, 1.4rem);
+  color: var(--icon-color);
+}
+
+.link-text {
+  margin-left: 10px;
+  transition: opacity 0.3s, visibility 0.3s;
+  white-space: nowrap;
+}
+
+.sidebar a:hover,
+.toggle-btn:hover {
+  background: var(--background-gray);
+  color: var(--hover-blue);
+}
+
+.sidebar a:hover .icon,
+.toggle-btn:hover .icon {
+  color: var(--hover-blue);
+}
+
+.sidebar a[href="index.php"]:hover {
+  color: #ff0000;
+}
+
+.sidebar a[href="index.php"]:hover .icon {
+  color: #ff0000;
+}
+
+.sidebar.collapsed {
+  width: 80px;
+}
+
+.sidebar.collapsed .link-text {
+  opacity: 0;
+  visibility: hidden;
+}
+
+.sidebar.show {
+  transform: translateX(0);
+  width: 250px;
+}
+
+.sidebar.collapsed.show {
+  width: 80px;
+}
+
+.main-content {
+  margin-top: 80px;
+  margin-left: 0;
+  padding: 20px;
+  transition: margin-left 0.3s ease;
+}
+
+.sidebar.show ~ .main-content {
+  margin-left: 250px;
+}
+
+.sidebar.collapsed.show ~ .main-content {
+  margin-left: 80px;
+}
+
+.sidebar-overlay {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 999;
+}
+
+@media (min-width: 992px) {
+  .sidebar {
+    transform: translateX(0);
+    width: 250px;
+  }
+
+  .sidebar.collapsed {
+    width: 80px;
+  }
+
+  .toggle-btn-mobile {
+    display: none;
+  }
+
+  .toggle-btn {
+    display: flex;
+  }
+
+  .main-content {
+    margin-left: 250px;
+  }
+
+  .sidebar.collapsed ~ .main-content {
+    margin-left: 80px;
+  }
+
+  .sidebar-overlay {
+    display: none !important;
+  }
+}
+
+@media (max-width: 991px) {
+  .sidebar {
+    width: 200px;
+  }
+
+  .sidebar.collapsed {
+    width: 60px;
+  }
+
+  .main-content {
+    margin-left: 0;
+  }
+
+  .sidebar.show ~ .main-content {
+    margin-left: 0;
+  }
+
+  .toggle-btn {
+    display: none;
+  }
+
+  .toggle-btn-mobile {
+    display: flex;
+  }
+}
+
+@media (max-width: 576px) {
+  .sidebar {
+    width: 180px;
+  }
+
+  .sidebar.collapsed {
+    width: 50px;
+  }
+
+  .sidebar a,
+  .toggle-btn {
+    padding: 10px 15px;
+    font-size: clamp(0.8rem, 2.5vw, 0.9rem);
+  }
+
+  .toggle-btn i,
+  .sidebar .icon {
+    font-size: clamp(1rem, 3vw, 1.2rem);
+  }
+
+  .header {
+    padding: 0 15px;
+  }
+
+  .logo-container {
+    max-width: 40px;
+  }
+
+  .toggle-btn-mobile {
+    font-size: 1.5rem;
+  }
+}

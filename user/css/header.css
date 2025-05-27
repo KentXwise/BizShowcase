@@ -1,0 +1,74 @@
+:root {
+  --primary-blue: #03045e;
+  --hover-blue: #005f8a;
+  --icon-color: #03045e;
+  --background-gray: #f0f2f5;
+  --white: #ffffff;
+  --text-dark: #343a40;
+  --light-gray: #dee2e6;
+  --blue-1: #03045e;
+}
+
+/* Header Styles */
+.header {
+  height: 80px;
+  background: var(--primary-blue);
+  display: flex;  
+  align-items: center;
+  padding: 0 20px;
+  color: var(--white);
+  position: fixed;
+  width: 100%;
+  top: 0;
+  left: 0;
+  z-index: 1000;
+  padding-left: 10px;
+}
+
+.logo-container {
+  max-width: 50px;
+  width: 100%;
+  margin-left: 0;
+}
+
+.logo {
+  width: 100%;
+  height: auto;
+  object-fit: contain;
+}
+
+/* Notification Icon */
+.notification-btn {
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  transition: transform 0.2s ease, color 0.3s ease;
+}
+
+.notification-btn .icon {
+  color: var(--white);
+  font-size: 1.5rem;
+}
+
+.notification-btn:hover .icon {
+  color: var(--hover-blue);
+  transform: scale(1.1);
+}
+
+.profile-imgg {
+  height: 50px;
+  width: 50px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+/* Responsive Adjustments for Header */
+@media (max-width: 768px) {
+  .header {
+    padding: 10px 15px;
+  }
+  .logo-container {
+    max-width: 100px;
+  }
+}

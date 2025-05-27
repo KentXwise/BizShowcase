@@ -58,11 +58,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             </div>
             <!-- Right: Form Section -->
             <div class="col-lg-6 d-flex align-items-center justify-content-center p-5">
-                <div class="w-100" style="max-width: 480px;">
+                <div class="form-section-wrapper w-100">
                     <div class="text-center mb-4">
                         <h3 class="fw-bold mt-2">BizShowcase</h3>
                     </div>
-                    <h2 class="fw-bold mb-3">Welcome, Admin!</h2>
+                    <h2 class="fw-bold mb-3">Admin SignUp</h2>
                     <p class="text-muted mb-4">Create your admin account to manage the platform</p>
                     <?php if ($error): ?>
                         <div class="alert alert-danger"><?php echo htmlspecialchars($error); ?></div>
@@ -93,7 +93,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             <input type="text" class="form-control" name="admin_code" placeholder="Admin Code" required>
                         </div>
                         <button type="submit" class="btn btn-primary w-100">Sign Up<i class="bi bi-box-arrow-in-right ms-1"></i></button>
-                        <p class="text-center mt-3">Already have an account? <a href="admin-login.php">Log in</a></p>
+                        <p class="text-center mt-3"> Already have an account? <a href="admin-login.php">Log in</a></p>
                     </form>
                 </div>
             </div>
@@ -102,20 +102,29 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <script>
 document.addEventListener("DOMContentLoaded", function () {
     const body = document.body;
-    body.classList.add('page-transition');
+    body.classList.add("page-loaded");
 
     const links = document.querySelectorAll("a[href='admin-login.php'], a[href='admin-signup.php']");
     links.forEach(link => {
         link.addEventListener("click", function (e) {
             e.preventDefault();
-            body.classList.add("page-transition-exit");
+            const href = link.getAttribute("href");
+
+            // Determine direction of slide
+            if (href.includes("signup")) {
+                body.classList.add("slide-right");
+            } else {
+                body.classList.add("slide-left");
+            }
+
             setTimeout(() => {
-                window.location.href = link.getAttribute("href");
-            }, 500); // Matches the CSS duration
+                window.location.href = href;
+            }, 500); // must match CSS duration
         });
     });
 });
 </script>
+
 
 
 </body>

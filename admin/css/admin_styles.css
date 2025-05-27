@@ -206,6 +206,37 @@ body {
     font-size: 0.95rem;
     padding: 0.75rem 1rem;
 }
+/* Starting state for transition */
+body {
+    transition: transform 0.5s ease-in-out, opacity 0.5s ease-in-out;
+}
+
+/* Page just loaded */
+body.page-loaded {
+    transform: translateX(0);
+    opacity: 1;
+}
+
+/* Slide left (to signup) */
+body.slide-left {
+    transform: translateX(-100%);
+    opacity: 0;
+}
+
+/* Slide right (to login) */
+body.slide-right {
+    transform: translateX(100%);
+    opacity: 0;
+}
+body {
+    transition: transform 0.8s ease-in-out, opacity 0.5s ease-in-out;
+    opacity: 1;
+}
+
+
+
+
+
 
 
 /* Responsive Adjustments */
@@ -229,5 +260,22 @@ body {
     #viewUserModal .form-control {
         font-size: 0.85rem;
         padding: 0.3rem 0.5rem;
+    }
+}
+@media (min-width: 1400px) {
+    .form-section-wrapper {
+        max-width: 480px;
+        margin: auto;
+    }
+
+    .form-section-wrapper h2 {
+        font-size: 2rem;
+    }
+}
+
+@media (min-width: 1200px) {
+    .col-lg-6 {
+        padding-left: 80px !important;
+        padding-right: 80px !important;
     }
 }

@@ -1,3 +1,27 @@
+<?php
+session_start();
+require_once 'includes/db_connect.php';
+require_once 'includes/functions.php';
+
+// Check if user is logged in
+if (!isset($_SESSION['user_id'])) {
+    header("Location: login.php"); // Redirect to login page if not logged in
+    exit();
+}
+
+// Fetch user information
+$user_id = $_SESSION['user_id'];
+$user = get_user_info($conn, $user_id);
+
+// Set default values if user data is not found
+$username = ($user && isset($user['first_name'], $user['last_name'])) 
+    ? htmlspecialchars($user['first_name'] . ' ' . $user['last_name'], ENT_QUOTES, 'UTF-8') 
+    : 'Guest';
+$profile_picture = ($user && !empty($user['profile_picture'])) 
+    ? htmlspecialchars($user['profile_picture'], ENT_QUOTES, 'UTF-8') 
+    : 'img/default_profile.jpg'; // Fallback image if no profile picture
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -21,10 +45,10 @@
           <i class="fas fa-bell icon"></i>
         </button>
         <a href="myprofile.php" style="text-decoration: none; color: inherit;">
-          <span>Momo</span>
+          <span><?php echo $username; ?></span>
         </a>
         <a href="myprofile.php">
-          <img src="img/momo.jpg" class="profile-imgg" alt="Profile">
+          <img src="<?php echo $profile_picture; ?>" class="profile-imgg" alt="Profile Picture">
         </a>
       </div>
     </div>

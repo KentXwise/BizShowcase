@@ -51,106 +51,143 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Settings - BizShowcase</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link href="css/styles.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <link href="css/settings.css" rel="stylesheet">
 </head>
 <body>
-    <nav class="navbar navbar-expand-lg navbar-light bg-light">
-        <div class="container-fluid">
-            <a class="navbar-brand" href="home.php">BizShowcase</a>
-            <div class="collapse navbar-collapse">
-                <ul class="navbar-nav me-auto">
-                    <li class="nav-item"><a class="nav-link" href="home.php">Home</a></li>
-                    <li class="nav-item"><a class="nav-link" href="profile.php">Profile</a></li>
-                    <li class="nav-item"><a class="nav-link active" href="settings.php">Settings</a></li>
-                    <li class="nav-item"><a class="nav-link" href="add-post.php">Add Post</a></li>
-                    <li class="nav-item"><a class="nav-link" href="subscription.php">Subscription</a></li>
-                    <li class="nav-item"><a class="nav-link" href="payment.php">Payment</a></li>
-                    <li class="nav-item"><a class="nav-link" href="logout.php">Logout</a></li>
-                </ul>
+    <?php include 'header.php'; ?>
+    <?php include 'sidebar.php'; ?>
+
+    <div class="main-content">
+        <div class="form-section">
+            <div class="form-title">Account Information</div>
+            <?php if ($error): ?>
+                <div class="alert alert-danger"><?php echo htmlspecialchars($error); ?></div>
+            <?php endif; ?>
+            <?php if ($success): ?>
+                <div class="alert alert-success"><?php echo htmlspecialchars($success); ?></div>
+            <?php endif; ?>
+            <form method="POST">
+                <input type="hidden" name="update_account" value="1">
+                <div class="row g-4">
+                    <div class="col-md-6">
+                        <label class="form-label">First Name</label>
+                        <input type="text" class="form-control" name="first_name" value="<?php echo htmlspecialchars($user['first_name'] ?? ''); ?>" required>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label">Last Name</label>
+                        <input type="text" class="form-control" name="last_name" value="<?php echo htmlspecialchars($user['last_name'] ?? ''); ?>" required>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label">Email</label>
+                        <input type="email" class="form-control" name="email" value="<?php echo htmlspecialchars($user['email'] ?? ''); ?>" required>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label">Address</label>
+                        <input type="text" class="form-control" name="address" value="<?php echo htmlspecialchars($user['address'] ?? ''); ?>">
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label">Contact Number</label>
+                        <input type="text" class="form-control" name="contact_number" value="<?php echo htmlspecialchars($user['contact_number'] ?? ''); ?>">
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label">Birthday</label>
+                        <input type="date" class="form-control" name="birthday" value="<?php echo htmlspecialchars($user['birthday'] ?? ''); ?>">
+                    </div>
+                    <div class="col-12 mt-5">
+                        <h4 class="text-danger">Delete Your Account</h4>
+                        <p class="text-muted">Once you delete your account, there is no going back. Please be certain.</p>
+                        <button type="button" class="btn btn-danger mt-2" data-bs-toggle="modal" data-bs-target="#deleteModal">
+                            Permanently Delete Account
+                        </button>
+                    </div>
+                </div>
+                <div class="text-end mt-4">
+                    <button type="submit" class="submit-btn">Save Changes</button>
+                    <button type="button" class="cancel-btn" onclick="cancelChanges()">Cancel</button>
+                </div>
+            </form>
+
+            <!-- Modal for Delete Account -->
+            <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="deleteModalLabel">Delete Account</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            Are you sure you want to permanently delete your account? This action cannot be undone.
+                        </div>
+                        <div class="modal-footer">
+                            <form method="POST">
+                                <input type="hidden" name="delete_account" value="1">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                                <button type="submit" class="btn btn-danger">Delete</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
             </div>
+
+            <div class="form-title mt-5">Business Information</div>
+            <form method="POST">
+                <input type="hidden" name="update_business" value="1">
+                <div class="row g-4">
+                    <div class="col-md-6">
+                        <label class="form-label">Company Name</label>
+                        <input type="text" class="form-control shadow-sm" name="company_name" value="<?php echo htmlspecialchars($business['company_name'] ?? ''); ?>" required>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label">Business Email</label>
+                        <input type="email" class="form-control shadow-sm" name="business_email" value="<?php echo htmlspecialchars($business['business_email'] ?? ''); ?>">
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label">Business Number</label>
+                        <input type="text" class="form-control shadow-sm" name="business_number" value="<?php echo htmlspecialchars($business['business_number'] ?? ''); ?>">
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label">Postal/Zip Code</label>
+                        <input type="text" class="form-control shadow-sm" name="postal_code" value="<?php echo htmlspecialchars($business['postal_code'] ?? ''); ?>">
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label">Address</label>
+                        <input type="text" class="form-control shadow-sm" name="business_address" value="<?php echo htmlspecialchars($business['business_address'] ?? ''); ?>" required>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label">Seller Type</label>
+                        <select class="form-select shadow-sm" name="seller_type">
+                            <option value="" <?php echo (isset($business['seller_type']) && $business['seller_type'] === '') ? 'selected' : ''; ?>>Select Seller Type</option>
+                            <option value="Sole Entrepreneurship" <?php echo (isset($business['seller_type']) && $business['seller_type'] === 'Sole Entrepreneurship') ? 'selected' : ''; ?>>Sole Proprietorship</option>
+                            <option value="Partnership" <?php echo (isset($business['seller_type']) && $business['seller_type'] === 'Partnership') ? 'selected' : ''; ?>>Partnership</option>
+                            <option value="Cooperation" <?php echo (isset($business['seller_type']) && $business['seller_type'] === 'Cooperation') ? 'selected' : ''; ?>>Cooperative</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="text-end mt-4">
+                    <button type="submit" class="submit-btn">Save Changes</button>
+                    <button type="button" class="cancel-btn" onclick="cancelChanges()">Cancel</button>
+                </div>
+            </form>
         </div>
-    </nav>
-
-    <div class="container mt-4">
-        <h2>Settings</h2>
-        <?php if ($error): ?>
-            <div class="alert alert-danger"><?php echo htmlspecialchars($error); ?></div>
-        <?php endif; ?>
-        <?php if ($success): ?>
-            <div class="alert alert-success"><?php echo htmlspecialchars($success); ?></div>
-        <?php endif; ?>
-
-        <h3>Account Information</h3>
-        <form method="POST">
-            <input type="hidden" name="update_account" value="1">
-            <div class="mb-3">
-                <label class="form-label">First Name</label>
-                <input type="text" class="form-control" name="first_name" value="<?php echo htmlspecialchars($user['first_name'] ?? ''); ?>" required>
-            </div>
-            <div class="mb-3">
-                <label class="form-label">Last Name</label>
-                <input type="text" class="form-control" name="last_name" value="<?php echo htmlspecialchars($user['last_name'] ?? ''); ?>" required>
-            </div>
-            <div class="mb-3">
-                <label class="form-label">Email</label>
-                <input type="email" class="form-control" name="email" value="<?php echo htmlspecialchars($user['email'] ?? ''); ?>" required>
-            </div>
-            <div class="mb-3">
-                <label class="form-label">Address</label>
-                <input type="text" class="form-control" name="address" value="<?php echo htmlspecialchars($user['address'] ?? ''); ?>">
-            </div>
-            <div class="mb-3">
-                <label class="form-label">Contact Number</label>
-                <input type="text" class="form-control" name="contact_number" value="<?php echo htmlspecialchars($user['contact_number'] ?? ''); ?>">
-            </div>
-            <div class="mb-3">
-                <label class="form-label">Birthday</label>
-                <input type="date" class="form-control" name="birthday" value="<?php echo htmlspecialchars($user['birthday'] ?? ''); ?>">
-            </div>
-            <button type="submit" class="btn btn-primary">Update Account</button>
-        </form>
-
-        <h3 class="mt-4">Business Information</h3>
-        <form method="POST">
-            <input type="hidden" name="update_business" value="1">
-            <div class="mb-3">
-                <label class="form-label">Company Name</label>
-                <input type="text" class="form-control" name="company_name" value="<?php echo htmlspecialchars($business['company_name'] ?? ''); ?>" required>
-            </div>
-            <div class="mb-3">
-                <label class="form-label">Postal/Zip Code</label>
-                <input type="text" class="form-control" name="postal_code" value="<?php echo htmlspecialchars($business['postal_code'] ?? ''); ?>">
-            </div>
-            <div class="mb-3">
-                <label class="form-label">Business Email</label>
-                <input type="email" class="form-control" name="business_email" value="<?php echo htmlspecialchars($business['business_email'] ?? ''); ?>">
-            </div>
-            <div class="mb-3">
-                <label class="form-label">Business Address</label>
-                <input type="text" class="form-control" name="business_address" value="<?php echo htmlspecialchars($business['business_address'] ?? ''); ?>" required>
-            </div>
-            <div class="mb-3">
-                <label class="form-label">Business Number</label>
-                <input type="text" class="form-control" name="business_number" value="<?php echo htmlspecialchars($business['business_number'] ?? ''); ?>">
-            </div>
-            <div class="mb-3">
-                <label class="form-label">Seller Type</label>
-                <select class="form-control" name="seller_type">
-                    <option value="" <?php echo (isset($business['seller_type']) && $business['seller_type'] === '') ? 'selected' : ''; ?>>Select Seller Type</option>
-                    <option value="Sole Entrepreneurship" <?php echo (isset($business['seller_type']) && $business['seller_type'] === 'Sole Entrepreneurship') ? 'selected' : ''; ?>>Sole Entrepreneurship</option>
-                    <option value="Partnership" <?php echo (isset($business['seller_type']) && $business['seller_type'] === 'Partnership') ? 'selected' : ''; ?>>Partnership</option>
-                    <option value="Cooperation" <?php echo (isset($business['seller_type']) && $business['seller_type'] === 'Cooperation') ? 'selected' : ''; ?>>Cooperation</option>
-                </select>
-            </div>
-            <button type="submit" class="btn btn-primary">Update Business</button>
-        </form>
-
-        <h3 class="mt-4">Delete Account</h3>
-        <form method="POST" onsubmit="return confirm('Are you sure you want to delete your account? This action cannot be undone.');">
-            <input type="hidden" name="delete_account" value="1">
-            <button type="submit" class="btn btn-danger">Delete Account</button>
-        </form>
     </div>
+
+    <script>
+        function cancelChanges() {
+            if (confirm("Are you sure you want to cancel changes?")) {
+                location.reload();
+            }
+        }
+
+        function toggleSidebar() {
+            document.getElementById('sidebar').classList.toggle('collapsed');
+        }
+
+        window.onload = function() {
+            toggleSidebar(); // Auto-collapse when page loads
+        };
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

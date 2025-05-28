@@ -61,77 +61,88 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Subscription - BizShowcase</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link href="css/styles.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <link href="css/subscription.css" rel="stylesheet">
 </head>
 <body>
-    <nav class="navbar navbar-expand-lg navbar-light bg-light">
-        <div class="container-fluid">
-            <a class="navbar-brand" href="home.php">BizShowcase</a>
-            <div class="collapse navbar-collapse">
-                <ul class="navbar-nav me-auto">
-                    <li class="nav-item"><a class="nav-link" href="home.php">Home</a></li>
-                    <li class="nav-item"><a class="nav-link" href="profile.php">Profile</a></li>
-                    <li class="nav-item"><a class="nav-link" href="settings.php">Settings</a></li>
-                    <li class="nav-item"><a class="nav-link" href="add-post.php">Add Post</a></li>
-                    <li class="nav-item"><a class="nav-link active" href="subscription.php">Subscription</a></li>
-                    <li class="nav-item"><a class="nav-link" href="payment.php">Payment</a></li>
-                    <li class="nav-item"><a class="nav-link" href="logout.php">Logout</a></li>
-                </ul>
-            </div>
-        </div>
-    </nav>
+    <?php include 'header.php'; ?>
+    <?php include 'sidebar.php'; ?>
 
-    <div class="container mt-4">
-        <h2>Advertising Request Form</h2>
-        <?php if ($error): ?>
-            <div class="alert alert-danger"><?php echo htmlspecialchars($error); ?></div>
-        <?php endif; ?>
-        <?php if ($success): ?>
-            <div class="alert alert-success"><?php echo htmlspecialchars($success); ?></div>
-        <?php endif; ?>
-        <form method="POST" enctype="multipart/form-data">
-            <div class="mb-3">
-                <label class="form-label">First Name</label>
-                <input type="text" class="form-control" name="first_name" value="<?php echo htmlspecialchars($user['first_name'] ?? ''); ?>" required>
-            </div>
-            <div class="mb-3">
-                <label class="form-label">Last Name</label>
-                <input type="text" class="form-control" name="last_name" value="<?php echo htmlspecialchars($user['last_name'] ?? ''); ?>" required>
-            </div>
-            <div class="mb-3">
-                <label class="form-label">Email</label>
-                <input type="email" class="form-control" name="email" value="<?php echo htmlspecialchars($user['email'] ?? ''); ?>" required>
-            </div>
-            <div class="mb-3">
-                <label class="form-label">Company Name</label>
-                <input type="text" class="form-control" name="company_name" value="<?php echo htmlspecialchars($business['company_name'] ?? ''); ?>" required>
-            </div>
-            <div class="mb-3">
-                <label class="form-label">Number</label>
-                <input type="text" class="form-control" name="number" value="<?php echo htmlspecialchars($business['business_number'] ?? ''); ?>" required>
-            </div>
-            <div class="mb-3">
-                <label class="form-label">Business Certificate</label>
-                <input type="file" class="form-control" name="business_certificate" accept=".pdf,.doc,.docx">
-            </div>
-            <div class="mb-3">
-                <label class="form-label">Business Clearance</label>
-                <input type="file" class="form-control" name="business_clearance" accept=".pdf,.doc,.docx">
-            </div>
-            <div class="mb-3">
-                <label class="form-label">Business Permit</label>
-                <input type="file" class="form-control" name="business_permit" accept=".pdf,.doc,.docx">
-            </div>
-            <div class="mb-3">
-                <label class="form-label">Subscription Type</label>
-                <select class="form-select" name="subscription_type" required>
-                    <option value="monthly">Monthly ($150)</option>
-                    <option value="yearly">Yearly ($1800)</option>
-                </select>
-            </div>
-            <button type="submit" class="btn btn-primary">Submit Request</button>
-        </form>
+    <div class="main-content">
+        <div class="form-section">
+            <div class="form-title">Advertising Request Form</div>
+            <?php if ($error): ?>
+                <div class="alert alert-danger"><?php echo htmlspecialchars($error); ?></div>
+            <?php endif; ?>
+            <?php if ($success): ?>
+                <div class="alert alert-success"><?php echo htmlspecialchars($success); ?></div>
+            <?php endif; ?>
+            <form method="POST" enctype="multipart/form-data">
+                <div class="row g-4">
+                    <div class="col-md-6">
+                        <label class="form-label">First Name</label>
+                        <input type="text" class="form-control" name="first_name" value="<?php echo htmlspecialchars($user['first_name'] ?? ''); ?>" required>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label">Last Name</label>
+                        <input type="text" class="form-control" name="last_name" value="<?php echo htmlspecialchars($user['last_name'] ?? ''); ?>" required>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label">Email</label>
+                        <input type="email" class="form-control" name="email" value="<?php echo htmlspecialchars($user['email'] ?? ''); ?>" required>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label">Company Name</label>
+                        <input type="text" class="form-control" name="company_name" value="<?php echo htmlspecialchars($business['company_name'] ?? ''); ?>" required>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label">Business Certificate</label>
+                        <input type="file" class="form-control" name="business_certificate" accept=".pdf,.doc,.docx">
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label">Number</label>
+                        <input type="text" class="form-control" name="number" value="<?php echo htmlspecialchars($business['business_number'] ?? ''); ?>" required>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label">Business Clearance</label>
+                        <input type="file" class="form-control" name="business_clearance" accept=".pdf,.doc,.docx">
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label">Subscription Type</label>
+                        <select class="form-select shadow-sm" name="subscription_type" required>
+                            <option value="monthly">Monthly ($150)</option>
+                            <option value="yearly">Yearly ($1800)</option>
+                        </select>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label">Business Permit</label>
+                        <input type="file" class="form-control" name="business_permit" accept=".pdf,.doc,.docx">
+                    </div>
+                </div>
+                <div class="text-end mt-4">
+                    <button type="submit" class="submit-btn">Submit Request</button>
+                    <button type="button" class="cancel-btn" onclick="cancelChanges()">Cancel</button>
+                </div>
+            </form>
+        </div>
     </div>
+
+    <script>
+        function toggleSidebar() {
+            document.getElementById('sidebar').classList.toggle('collapsed');
+        }
+
+        function cancelChanges() {
+            if (confirm("Are you sure you want to cancel changes?")) {
+                location.reload();
+            }
+        }
+
+        window.onload = function() {
+            toggleSidebar(); // Auto-collapse when page loads
+        };
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

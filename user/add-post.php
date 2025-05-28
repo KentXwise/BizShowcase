@@ -41,80 +41,74 @@ $is_subscribed = has_active_subscription($conn, $_SESSION['user_id']);
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Add Post - BizShowcase</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <link rel="stylesheet" href="css/add-post.css">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
 <body>
-    <nav class="navbar navbar-expand-lg navbar-light bg-light">
-        <div class="container-fluid">
-            <a class="navbar-brand" href="home.php">BizShowcase</a>
-            <div class="collapse navbar-collapse">
-                <ul class="navbar-nav me-auto">
-                    <li class="nav-item"><a class="nav-link" href="home.php">Home</a></li>
-                    <li class="nav-item"><a class="nav-link" href="profile.php">Profile</a></li>
-                    <li class="nav-item"><a class="nav-link" href="settings.php">Settings</a></li>
-                    <li class="nav-item"><a class="nav-link" href="add-post.php">Add Post</a></li>
-                    <li class="nav-item"><a class="nav-link" href="subscription.php">Subscription</a></li>
-                    <li class="nav-item"><a class="nav-link" href="payment.php">Payment</a></li>
-                    <li class="nav-item"><a class="nav-link" href="logout.php">Logout</a></li>
-                </ul>
-            </div>
-        </div>
-    </nav>
+    <?php include 'header.php'; ?>
+    <?php include 'sidebar.php'; ?>
 
-    <div class="container mt-4">
-        <h2>Create New Post</h2>
-        <form id="postForm" enctype="multipart/form-data">
-            <div class="mb-3">
-                <label class="form-label">Company Name</label>
-                <input type="text" class="form-control" name="company_name" value="<?php echo htmlspecialchars($business_profile['company_name'] ?? ''); ?>" required>
-            </div>
-            <div class="mb-3">
-                <label class="form-label">Category</label>
-                <select class="form-select" name="category_id" id="categorySelect" required>
-                    <option value="">Select Category</option>
-                    <?php foreach ($categories as $category): ?>
-                        <option value="<?php echo $category['category_id']; ?>">
-                            <?php echo htmlspecialchars($category['category_name']); ?>
-                        </option>
-                    <?php endforeach; ?>
-                    <option value="request_new">Request New Category</option>
-                </select>
-                <input type="text" class="form-control mt-2 d-none" id="newCategoryInput" name="new_category" placeholder="Enter new category name">
-            </div>
-            <div class="mb-3">
-                <label class="form-label">Description</label>
-                <textarea class="form-control" name="description" required></textarea>
-            </div>
-            <div class="mb-3">
-                <label class="form-label">Business Email</label>
-                <input type="email" class="form-control" name="business_email" value="<?php echo htmlspecialchars($business_profile['business_email'] ?? ''); ?>" required>
-            </div>
-            <div class="mb-3">
-                <label class="form-label">Business Address</label>
-                <input type="text" class="form-control" name="business_address" value="<?php echo htmlspecialchars($business_profile['business_address'] ?? ''); ?>" required>
-            </div>
-            <div class="mb-3">
-                <label class="form-label">Business Number</label>
-                <input type="text" class="form-control" name="business_number" value="<?php echo htmlspecialchars($business_profile['business_number'] ?? ''); ?>" required>
-            </div>
-            <div class="mb-3">
-                <label class="form-label">Seller Type</label>
-                <select class="form-control" name="seller_type" required>
-                    <option value="" <?php echo (isset($business_profile['seller_type']) && $business_profile['seller_type'] === '') ? 'selected' : ''; ?>>Select Seller Type</option>
-                    <option value="Sole Entrepreneurship" <?php echo (isset($business_profile['seller_type']) && $business_profile['seller_type'] === 'Sole Entrepreneurship') ? 'selected' : ''; ?>>Sole Entrepreneurship</option>
-                    <option value="Partnership" <?php echo (isset($business_profile['seller_type']) && $business_profile['seller_type'] === 'Partnership') ? 'selected' : ''; ?>>Partnership</option>
-                    <option value="Cooperation" <?php echo (isset($business_profile['seller_type']) && $business_profile['seller_type'] === 'Cooperation') ? 'selected' : ''; ?>>Cooperation</option>
-                </select>
-            </div>
-            <div class="mb-3">
-                <label class="form-label">Upload Images</label>
-                <input type="file" class="form-control" name="images[]" multiple accept="image/*">
-            </div>
-            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#previewModal">Preview</button>
-            <button type="submit" class="btn btn-success">Post</button>
-            <button type="button" class="btn btn-secondary" onclick="window.location.href='home.php'">Cancel</button>
-        </form>
+    <div class="main-content">
+        <div class="form-section">
+            <div class="form-title">Create New Post</div>
+            <form id="postForm" enctype="multipart/form-data">
+                <div class="row g-4">
+                    <div class="col-md-6">
+                        <label class="form-label">Company Name</label>
+                        <input type="text" class="form-control" name="company_name" value="<?php echo htmlspecialchars($business_profile['company_name'] ?? ''); ?>" required>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label">Business Email</label>
+                        <input type="email" class="form-control" name="business_email" value="<?php echo htmlspecialchars($business_profile['business_email'] ?? ''); ?>" required>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label">Upload Images</label>
+                        <input type="file" class="form-control" name="images[]" multiple accept="image/*">
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label">Business Number</label>
+                        <input type="text" class="form-control" name="business_number" value="<?php echo htmlspecialchars($business_profile['business_number'] ?? ''); ?>" required>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label">Seller Type</label>
+                        <select class="form-select shadow-sm" name="seller_type" required>
+                            <option value="" <?php echo (isset($business_profile['seller_type']) && $business_profile['seller_type'] === '') ? 'selected' : ''; ?>>Select Seller Type</option>
+                            <option value="Sole Entrepreneurship" <?php echo (isset($business_profile['seller_type']) && $business_profile['seller_type'] === 'Sole Entrepreneurship') ? 'selected' : ''; ?>>Sole Entrepreneurship</option>
+                            <option value="Partnership" <?php echo (isset($business_profile['seller_type']) && $business_profile['seller_type'] === 'Partnership') ? 'selected' : ''; ?>>Partnership</option>
+                            <option value="Cooperation" <?php echo (isset($business_profile['seller_type']) && $business_profile['seller_type'] === 'Cooperation') ? 'selected' : ''; ?>>Cooperation</option>
+                        </select>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label">Business Address</label>
+                        <input type="text" class="form-control" name="business_address" value="<?php echo htmlspecialchars($business_profile['business_address'] ?? ''); ?>" required>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label">Category</label>
+                        <select class="form-select shadow-sm" name="category_id" id="categorySelect" required>
+                            <option value="">Select Category</option>
+                            <?php foreach ($categories as $category): ?>
+                                <option value="<?php echo $category['category_id']; ?>">
+                                    <?php echo htmlspecialchars($category['category_name']); ?>
+                                </option>
+                            <?php endforeach; ?>
+                            <option value="request_new">Request New Category</option>
+                        </select>
+                        <input type="text" class="form-control mt-2 d-none" id="newCategoryInput" name="new_category" placeholder="Enter new category name">
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label">Description</label>
+                        <textarea class="form-control" name="description" rows="6" placeholder="Description" style="font-family: 'Poppins', sans-serif; border-color: #D9D9D9; resize: vertical;" maxlength="1000" required></textarea>
+                    </div>
+                    <div class="text-end mt-4">
+                        <button type="button" class="submit-btn" data-bs-toggle="modal" data-bs-target="#previewModal">Preview</button>
+                        <button type="submit" class="submit-btn">Post</button>
+                        <button type="button" class="cancel-btn" onclick="cancelChanges()">Cancel</button>
+                    </div>
+                </div>
+            </form>
+        </div>
     </div>
 
     <!-- Preview Modal -->
@@ -157,7 +151,7 @@ $is_subscribed = has_active_subscription($conn, $_SESSION['user_id']);
         </div>
     </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script>
         $(document).ready(function() {
             // Show/hide new category input
@@ -213,6 +207,23 @@ $is_subscribed = has_active_subscription($conn, $_SESSION['user_id']);
                     });
                 }
             });
+
+            // Cancel changes
+            window.cancelChanges = function() {
+                if (confirm("Are you sure you want to cancel changes?")) {
+                    window.location.href = 'home.php';
+                }
+            };
+
+            // Sidebar toggle
+            window.toggleSidebar = function() {
+                document.getElementById('sidebar').classList.toggle('collapsed');
+            };
+
+            // Auto-collapse sidebar on page load
+            window.onload = function() {
+                toggleSidebar();
+            };
         });
     </script>
 </body>

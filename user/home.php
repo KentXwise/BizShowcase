@@ -46,11 +46,11 @@ function get_post_counts($conn, $post_id) {
         <!-- Search Bar and Category Dropdown -->
         <div class="search-bar-section">
             <div class="search-bar-container">
-                <div class="input-group search-bar" style="max-width: 500px; width: 100%;">
+                <div class="input-group search-bar">
                     <input type="text" id="searchUser" class="form-control" placeholder="Search users..." aria-label="Search users">
                     <span class="input-group-text"><i class="fas fa-search"></i></span>
                 </div>
-                <div class="category-dropdown" style="min-width: 150px;">
+                <div class="category-dropdown">
                     <select id="categoryFilter" class="form-select" aria-label="Filter by category">
                         <option value="">Select Category</option>
                         <?php foreach ($categories as $category): ?>
@@ -139,7 +139,7 @@ function get_post_counts($conn, $post_id) {
 
                                 <!-- Post Modal -->
                                 <div class="modal fade" id="postModal-<?php echo $post['post_id']; ?>" tabindex="-1" aria-labelledby="postModalLabel-<?php echo $post['post_id']; ?>" aria-hidden="true">
-                                    <div class="modal-dialog modal-xl">
+                                    <div class="modal-dialog modal-lg">
                                         <div class="modal-content">
                                             <div class="modal-header">
                                                 <h5 class="modal-title" id="postModalLabel-<?php echo $post['post_id']; ?>">
@@ -149,14 +149,14 @@ function get_post_counts($conn, $post_id) {
                                             </div>
                                             <div class="modal-body">
                                                 <div class="row g-0">
-                                                    <div class="col-md-8">
+                                                    <div class="col-md-7">
                                                         <?php if (!empty($images)): ?>
                                                             <div id="carousel-<?php echo $post['post_id']; ?>" class="carousel slide">
                                                                 <div class="carousel-inner">
                                                                     <?php foreach ($images as $index => $image): ?>
                                                                         <div class="carousel-item <?php echo $index === 0 ? 'active' : ''; ?>">
                                                                             <img src="../<?php echo htmlspecialchars($image['image_path']); ?>" 
-                                                                                 class="d-block w-100" 
+                                                                                 class="d-block w-100 modal-carousel-image" 
                                                                                  alt="Image <?php echo $index + 1; ?> for <?php echo htmlspecialchars($post['company_name']); ?>" 
                                                                                  loading="lazy">
                                                                         </div>
@@ -187,7 +187,7 @@ function get_post_counts($conn, $post_id) {
                                                                 <span><i class="fas fa-star"></i> <span class="favorite-count"><?php echo $counts['favorite_count']; ?></span></span>
                                                                 <span><i class="fas fa-comment"></i> <span class="comment-count"><?php echo $counts['comment_count']; ?></span></span>
                                                             </div>
-                                                            <div class="d-flex gap-2 mb-3">
+                                                            <div class="d-flex gap-2 mb-3 flex-wrap">
                                                                 <button class="btn btn-outline-primary action-btn like-btn" 
                                                                         data-post-id="<?php echo $post['post_id']; ?>" 
                                                                         <?php echo $has_liked ? 'disabled' : ''; ?>
@@ -208,7 +208,7 @@ function get_post_counts($conn, $post_id) {
                                                             </div>
                                                         </div>
                                                     </div>
-                                                    <div class="col-md-4">
+                                                    <div class="col-md-5">
                                                         <div class="comments-panel">
                                                             <button class="btn btn-outline-primary show-comments-btn" 
                                                                     data-post-id="<?php echo $post['post_id']; ?>"
@@ -262,7 +262,7 @@ function get_post_counts($conn, $post_id) {
                 posts.forEach(post => {
                     const imagesHtml = post.images && post.images.length > 0 ? post.images.map((image, index) => `
                         <div class="carousel-item ${index === 0 ? 'active' : ''}">
-                            <img src="../${image.image_path}" class="d-block w-100" alt="Image ${index + 1} for ${post.company_name}" loading="lazy">
+                            <img src="../${image.image_path}" class="d-block w-100 modal-carousel-image" alt="Image ${index + 1} for ${post.company_name}" loading="lazy">
                         </div>
                     `).join('') : '';
 
@@ -322,7 +322,7 @@ function get_post_counts($conn, $post_id) {
                                 </div>
                             </div>
                             <div class="modal fade" id="postModal-${post.post_id}" tabindex="-1" aria-labelledby="postModalLabel-${post.post_id}" aria-hidden="true">
-                                <div class="modal-dialog modal-xl">
+                                <div class="modal-dialog modal-lg">
                                     <div class="modal-content">
                                         <div class="modal-header">
                                             <h5 class="modal-title" id="postModalLabel-${post.post_id}">${post.company_name}</h5>
@@ -330,7 +330,7 @@ function get_post_counts($conn, $post_id) {
                                         </div>
                                         <div class="modal-body">
                                             <div class="row g-0">
-                                                <div class="col-md-8">
+                                                <div class="col-md-7">
                                                     ${post.images && post.images.length > 0 ? `
                                                         <div id="carousel-${post.post_id}" class="carousel slide">
                                                             <div class="carousel-inner">
@@ -346,7 +346,7 @@ function get_post_counts($conn, $post_id) {
                                                             <span><i class="fas fa-star"></i> <span class="favorite-count">0</span></span>
                                                             <span><i class="fas fa-comment"></i> <span class="comment-count">0</span></span>
                                                         </div>
-                                                        <div class="d-flex gap-2 mb-3">
+                                                        <div class="d-flex gap-2 mb-3 flex-wrap">
                                                             <button class="btn btn-outline-primary action-btn like-btn" 
                                                                     data-post-id="${post.post_id}" 
                                                                     ${post.has_liked ? 'disabled' : ''} 
@@ -367,7 +367,7 @@ function get_post_counts($conn, $post_id) {
                                                         </div>
                                                     </div>
                                                 </div>
-                                                <div class="col-md-4">
+                                                <div class="col-md-5">
                                                     <div class="comments-panel">
                                                         <button class="btn btn-outline-primary show-comments-btn" 
                                                                 data-post-id="${post.post_id}"

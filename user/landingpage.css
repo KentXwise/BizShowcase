@@ -1,0 +1,239 @@
+
+    body, html {
+      margin: 0;
+      padding: 0;
+      font-family: 'Segoe UI', sans-serif;
+      background-color: #fff;
+      overflow-x: hidden;
+    }
+
+    .background-hero {
+      position: relative;
+      height: 100vh;
+      overflow: hidden;
+    }
+
+    .floating-layer {
+      position: absolute;
+      left: 0;
+      width: 200%;
+      display: flex;
+      z-index: 0;
+      opacity: 0.9;
+    }
+
+    .floating-layer .zoom-wrapper {
+      height: 220px;
+      margin: 0 40px;
+      overflow: hidden;
+      border-radius: 12px;
+      flex-shrink: 0;
+    }
+
+    .floating-layer .zoom-wrapper img {
+      height: 100%;
+      width: auto;
+      object-fit: cover;
+      animation: zoom 20s ease-in-out infinite alternate;
+    }
+
+    .move-left {
+      animation: moveLeft 90s linear infinite;
+    }
+
+    .move-right {
+      animation: moveRight 90s linear infinite;
+    }
+
+    @keyframes moveLeft {
+      from { transform: translateX(0); }
+      to { transform: translateX(-50%); }
+    }
+
+    @keyframes moveRight {
+      from { transform: translateX(-30%); }
+      to { transform: translateX(0); }
+    }
+
+    @keyframes zoom {
+      from { transform: scale(1); }
+      to { transform: scale(1.1); }
+    }
+
+    .hero {
+      position: absolute;
+      top: 0;
+      left: 0;
+      height: 50%;
+      width: 100%;
+      z-index: 2;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 20px;
+    }
+  
+    .hero h1 {
+      font-weight: 700;
+      font-size: 64px;
+      color: #5b2dff;
+    }
+
+    .search-box {
+      max-width: 600px;
+  margin-top: 20px;
+  width: 100%;
+  background-color: rgba(255, 255, 255, 0.9);
+  padding: 10px;
+  border-radius: 12px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    }
+    .search-box .btn-primary {
+  font-weight: 600;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.search-box .btn-primary:hover {
+  background-color: #4720cc;
+  transform: scale(1.05);
+}
+
+    .search-box .form-control {
+      font-size: 1.2rem;
+      padding: 15px;
+    }
+
+    nav.navbar {
+      z-index: 10;
+      position: relative;
+    }
+
+    .content-section {
+      padding: 100px 20px;
+      background: #f9f9f9;
+    }
+
+    /* General typography */
+h2 {
+  font-weight: 700;
+  color: #1a1a1a;
+}
+
+h5, h6 {
+  font-weight: 600;
+  color: #333;
+}
+
+p {
+  color: #555;
+  font-size: 0.95rem;
+}
+
+/* Image size control */
+.img-fluid {
+  max-height: 200px;
+  object-fit: contain;
+}
+
+/* Button styles */
+.btn-outline-primary {
+  border-width: 2px;
+}
+
+.btn-primary {
+  background-color: #5b2dff;
+  border-color: #5b2dff;
+}
+
+.btn-primary:hover,
+.btn-outline-primary:hover {
+  opacity: 0.9;
+}
+
+/* Blockquote styling */
+blockquote {
+  font-size: 1.1rem;
+  color: #444;
+}
+
+.blockquote-footer {
+  color: #777;
+}
+
+/* Footer tweaks */
+footer h6 {
+  font-weight: 600;
+  margin-bottom: 1rem;
+}
+
+footer ul {
+  padding-left: 0;
+  list-style: none;
+}
+
+footer a {
+  text-decoration: none;
+  color: #6c757d;
+}
+
+footer a:hover {
+  text-decoration: underline;
+  color: #5b2dff;
+}
+
+.section-image {
+  width: 90%;
+  height: 500px; /* adjust height as needed */
+  object-fit: cover;
+  border-radius: 10px;
+}
+
+/* Floating Side Ads with Fade In */
+  .floating-ad {
+    position: fixed;
+    bottom: 40px;
+    width: 250px;
+    height: 700px;
+    background-color: #fff;
+    box-shadow: 0 0 12px rgba(0,0,0,0.25);
+    z-index: 9999;
+    border-radius: 12px;
+    display: none;
+    animation: fadeIn 1s ease forwards;
+  }
+
+  .floating-ad img {
+    width: 100%;
+    height: auto;
+    border-bottom: 1px solid #ddd;
+  }
+
+  .floating-ad .close-btn {
+    text-align: right;
+    background-color: #f8f9fa;
+  }
+
+  .floating-ad .close-btn button {
+    background: none;
+    border: none;
+    font-size: 18px;
+    font-weight: bold;
+    cursor: pointer;
+    padding: 6px 12px;
+  }
+
+  #adRight { right: 20px; }
+  #adLeft { left: 20px; }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  @media (max-width: 768px) {
+    #adRight, #adLeft {
+      display: none !important;
+    }
+  }

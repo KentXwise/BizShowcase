@@ -21,7 +21,7 @@
         <a href="add-post.php"><i class="fas fa-plus-circle icon"></i><span class="link-text">Add Post</span></a>
         <a href="subscription.php"><i class="fas fa-credit-card icon"></i><span class="link-text">Subscription</span></a>
         <a href="payment.php"><i class="fas fa-wallet icon"></i><span class="link-text">Payment</span></a>
-        <a href="index.php"><i class="fas fa-sign-out-alt icon"></i><span class="link-text">Log Out</span></a>
+        <a href="logout.php"><i class="fas fa-sign-out-alt icon"></i><span class="link-text">Log Out</span></a>
     </nav>
 </aside>
 

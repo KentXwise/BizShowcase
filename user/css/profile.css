@@ -1,0 +1,271 @@
+:root {
+  --primary-blue: #0d6efd;
+  --hover-blue: #0b5ed7;
+  --blue-950: #001845;
+  --blue-2: #0077b6;
+  --white: #ffffff;
+  --light-gray: #dee2e6;
+}
+
+/* Button Styling */
+.btn.btn-blue-2 {
+  background-color: var(--primary-blue);
+  color: var(--white);
+  border: none;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+.btn.btn-blue-2:hover {
+  background-color: var(--hover-blue) !important;
+  color: var(--white) !important;
+}
+
+/* Profile Container */
+.profile-container {
+  max-width: 1200px;
+  margin-left: auto;
+  margin-right: auto;
+  padding: 0 15px;
+}
+
+/* Profile Image */
+.profile-img {
+  width: 100px;
+  height: 100px;
+  border-radius: 10px;
+  object-fit: cover;
+}
+
+/* Profile Name and Stats */
+.profile-name {
+  font-size: 1.8rem;
+  font-weight: 500;
+}
+.profile-stats {
+  font-size: 1rem;
+}
+.detail-label {
+  font-weight: 600;
+}
+.detail-value {
+  color: var(--blue-2);
+}
+.detail-value.text-decoration-underline {
+  text-decoration: underline;
+}
+
+/* Tabs */
+.nav-tabs .nav-link {
+  background-color: #e9ecef;
+  color: #495057;
+  border: 1px solid transparent;
+  border-bottom: none;
+  border-radius: 0.375rem 0.375rem 0 0;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+.nav-tabs .nav-link.active {
+  background-color: var(--primary-blue);
+  color: white;
+  border-color: #dee2e6 #dee2e6 #fff;
+}
+
+/* Post Card */
+.post-card {
+  background: var(--white);
+  border: 1px solid var(--light-gray);
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  padding: 20px;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  min-height: 400px; /* Set a minimum height for consistency */
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+.post-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+}
+.post-img {
+  width: 100%;
+  max-width: 300px; /* Increased for larger images */
+  height: auto;
+  max-height: 200px; /* Prevent images from becoming too tall */
+  border-radius: 4px;
+  object-fit: cover;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+}
+.user-img {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+}
+.indicator {
+  width: 16px;
+  height: 4px;
+}
+.post-title {
+  font-size: 1.1rem;
+  color: var(--blue-950);
+  margin-bottom: 0.5rem;
+}
+.post-description {
+  font-size: 0.9rem;
+  color: #495057;
+  margin-bottom: 1rem;
+  max-height: 100px; /* Limit description height */
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 3; /* Limit to 3 lines */
+  -webkit-box-orient: vertical;
+}
+.post-date {
+  font-size: 0.8rem;
+}
+.user-name {
+  font-size: 1rem;
+  font-weight: 600;
+}
+
+/* Like Button */
+.like-button i {
+  font-size: 1.2rem;
+  color: var(--primary-blue);
+  cursor: pointer;
+  transition: color 0.3s ease, transform 0.3s ease;
+}
+.like-button:hover i {
+  color: var(--hover-blue);
+  transform: scale(1.2);
+}
+.like-button.liked i {
+  color: red;
+}
+.like-button.liked i::before {
+  content: "\f004";
+  font-family: "Font Awesome 6 Free";
+  font-weight: 900;
+}
+
+/* Main Content */
+.main-content {
+  padding: 1rem;
+  max-width: 100%;
+  margin: 0 auto;
+  transition: margin-left 0.3s ease;
+}
+
+/* Responsive Adjustments */
+@media (min-width: 992px) {
+  .main-content {
+    margin-left: 80px;
+  }
+}
+@media (max-width: 991px) {
+  .sidebar {
+    transform: translateX(-100%);
+  }
+  .sidebar.show {
+    transform: translateX(0);
+  }
+  .main-content {
+    margin-left: 0;
+    padding: 15px;
+  }
+}
+@media (max-width: 768px) {
+  .profile-img {
+    width: 90px;
+    height: 90px;
+  }
+  .profile-name {
+    font-size: 1.6rem;
+  }
+  .profile-stats {
+    font-size: 0.9rem;
+  }
+  .edit-profile-btn {
+    font-size: 0.9rem;
+    padding: 8px 16px;
+  }
+  .nav-tabs .nav-link {
+    font-size: 0.9rem;
+    padding: 8px 12px;
+  }
+  .post-card {
+    min-height: 350px; /* Slightly smaller for tablets */
+    padding: 16px;
+  }
+  .post-img {
+    max-width: 250px; /* Adjusted for tablets */
+    max-height: 180px;
+  }
+  .post-description {
+    font-size: 0.8rem;
+    max-height: 80px;
+    -webkit-line-clamp: 3;
+  }
+}
+@media (max-width: 576px) {
+  .profile-img {
+    width: 80px;
+    height: 80px;
+  }
+  .profile-name {
+    font-size: 1.5rem;
+  }
+  .profile-stats {
+    font-size: 0.9rem;
+  }
+  .edit-profile-btn {
+    font-size: 0.8rem;
+    padding: 6px 12px;
+  }
+  .detail-label,
+  .detail-value {
+    font-size: 0.9rem;
+  }
+  .nav-tabs .nav-link {
+    font-size: 0.8rem;
+    padding: 6px 10px;
+  }
+  .post-card {
+    min-height: 300px; /* Smaller for mobile */
+    padding: 12px;
+  }
+  .post-img {
+    max-width: 200px; /* Adjusted for small screens */
+    max-height: 150px;
+  }
+  .post-description {
+    font-size: 0.7rem;
+    max-height: 60px;
+    -webkit-line-clamp: 3;
+  }
+  .user-img {
+    width: 30px;
+    height: 30px;
+  }
+  .user-name {
+    font-size: 0.9rem;
+  }
+  .post-date {
+    font-size: 0.7rem;
+  }
+  .post-title {
+    font-size: 0.9rem;
+  }
+  .like-button i {
+    font-size: 14px;
+  }
+  .indicator {
+    width: 12px;
+    height: 3px;
+  }
+  .btn-blue-2 {
+    font-size: 0.8rem;
+    padding: 6px;
+  }
+}

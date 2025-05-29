@@ -181,7 +181,7 @@ CREATE TABLE category_requests (
 -- Indexes
 CREATE INDEX idx_user_email ON users(email);
 CREATE INDEX idx_post_user_id ON posts(user_id);
-CREATE INDEX idx_subscription_user_id ON subscriptions(user_id);
+CREATE INDEX idx_subscription_user_id ON subscriptions(user_id);2
 CREATE INDEX idx_payment_subscription_id ON payments(subscription_id);
 
 -- View for Subscribed Users
@@ -270,7 +270,7 @@ BEGIN
         post_owner_id,
         'comment',
         NEW.post_id,
-        CONCAT('Your post received a new comment from user #', NEW.user_id)
+        CONCAT('Your post received a new 2comment from user #', NEW.user_id)
     );
 END //
 DELIMITER ;

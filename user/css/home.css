@@ -1,425 +1,553 @@
 body {
-    background-color: #f5f6f8;
-    font-family: 'Inter', sans-serif;
-    line-height: 1.6;
+  background-color: #f5f6f8;
+  font-family: "Inter", sans-serif;
+  line-height: 1.6;
+  margin: 0;
+  padding: 0;
 }
 
-/* Post Card Styles (Unchanged) */
+/* Main Content */
+.main-content {
+  margin-left: 80px; /* Adjust based on sidebar width */
+  margin-top: 60px; /* Adjust based on header height */
+  padding: 20px;
+}
+
+/* Search Bar Section */
+.search-bar-section {
+  padding: 1.5rem 0;
+  background-color: #ffffff;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  z-index: 1050; /* Below header but above content */
+}
+
+.search-bar-container {
+  display: flex;
+  justify-content: center; /* Center the search bar */
+  align-items: center;
+  gap: 1rem; /* Space between search bar and category dropdown */
+  max-width: 1200px; /* Match container width */
+  margin: 0 auto;
+  position: relative;
+}
+
+.search-bar {
+  max-width: 500px;
+  width: 100%;
+}
+
+.search-bar .form-control {
+  height: 40px;
+  font-size: 1rem;
+  padding: 0.5rem 1rem;
+  border-radius: 4px;
+  border: 1px solid #ced4da;
+}
+
+.search-bar .input-group-text {
+  height: 40px;
+  font-size: 1rem;
+  padding: 0.5rem 1rem;
+  border-radius: 0 4px 4px 0;
+  background: #e9ecef;
+  border: 1px solid #ced4da;
+  border-left: none;
+}
+
+.category-dropdown {
+  position: absolute;
+  right: 0;
+}
+
+.category-dropdown .form-select {
+  height: 40px;
+  font-size: 1rem;
+  padding: 0.5rem 1rem;
+  border-radius: 4px;
+  border: 1px solid #ced4da;
+  background: #ffffff;
+  min-width: 150px;
+}
+
+/* Posts Container */
+.posts-container {
+  margin-top: 20px;
+}
+
+/* Posts Section Header */
+.d-flex.justify-content-between.align-items-center.mb-4 {
+  margin-bottom: 1.5rem;
+}
+
+/* Post Card Styles */
 .post-card {
-    border: none;
-    border-radius: 20px;
-    background: linear-gradient(145deg, #ffffff, #f8fafc);
-    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.06);
-    margin-bottom: 2rem;
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
-    overflow: hidden;
-    max-width: 350px;
-    margin-left: auto;
-    margin-right: auto;
+  border: none;
+  border-radius: 8px;
+  background: #ffffff;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  margin-bottom: 1rem;
+  transition: transform 0.2s ease;
+  width: 100%;
+  max-width: 400px; /* Increased from 350px */
+  height: 550px; /* Increased from 500px to accommodate more content */
+  display: flex;
+  flex-direction: column;
 }
 
 .post-card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 12px 28px rgba(0, 0, 0, 0.1);
+  transform: translateY(-2px);
 }
 
 .post-card .card-body {
-    padding: 1.25rem;
+  padding: 1rem;
+  flex: 1; /* Allow card body to take remaining space */
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between; /* Distribute content evenly */
+  overflow: hidden; /* Prevent content overflow */
 }
 
 .post-image {
-    width: 100%;
-    height: 200px;
-    object-fit: cover;
-    border-radius: 16px;
-    cursor: pointer;
-    transition: transform 0.3s ease;
-}
-
-.post-image:hover {
-    transform: scale(1.03);
+  width: 100%;
+  height: 220px; /* Increased from 200px */
+  object-fit: contain; /* Preserve aspect ratio, no stretching */
+  object-position: center; /* Center the image */
+  border-radius: 8px 8px 0 0;
+  cursor: pointer;
+  background-color: #f8f9fa; /* Background color for empty space around image */
 }
 
 .post-images-container {
-    position: relative;
-    border-radius: 16px;
-    overflow: hidden;
+  position: relative;
+  border-radius: 8px 8px 0 0;
+  overflow: hidden;
+  width: 100%;
+  height: 220px; /* Increased from 200px */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #f8f9fa; /* Background for 'No images' case */
 }
 
 .post-card .card-title {
-    font-size: 1.25rem;
-    font-weight: 700;
-    color: #1f2937;
-    margin-bottom: 0.5rem;
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #212529;
+  margin-bottom: 0.5rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis; /* Truncate long titles */
 }
 
 .post-card .card-text {
-    font-size: 0.9rem;
-    color: #6b7280;
-    margin-bottom: 1rem;
+  font-size: 0.9rem;
+  color: #6c757d;
+  margin-bottom: 0.75rem;
+  display: -webkit-box;
+  -webkit-line-clamp: 5; /* Show up to 5 lines of description */
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .post-stats {
-    font-size: 0.85rem;
-    color: #6b7280;
-    margin-bottom: 1rem;
-    display: flex;
-    gap: 1.5rem;
+  font-size: 0.85rem;
+  color: #6c757d;
+  margin-bottom: 0.75rem;
+  display: flex;
+  gap: 1rem;
 }
 
 .post-stats span {
-    display: flex;
-    align-items: center;
-    gap: 0.4rem;
-    font-weight: 500;
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  font-weight: 500;
 }
 
 .action-btn {
-    border-radius: 50px;
-    padding: 0.5rem 1.25rem;
-    font-size: 0.85rem;
-    font-weight: 500;
-    transition: all 0.3s ease;
-    border: 2px solid;
-    background: transparent;
+  border-radius: 4px;
+  padding: 0.25rem 0.75rem;
+  font-size: 0.85rem;
+  font-weight: 500;
+  transition: all 0.2s ease;
+  border: 1px solid;
+  background: transparent;
 }
 
 .action-btn:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  transform: translateY(-1px);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 .action-btn:disabled {
-    opacity: 0.6;
-    cursor: not-allowed;
-    transform: none;
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none;
 }
 
 .btn-outline-primary {
-    border-color: #3b82f6;
-    color: #3b82f6;
+  border-color: #0d6efd;
+  color: #0d6efd;
 }
 
 .btn-outline-primary:hover {
-    background: linear-gradient(90deg, #3b82f6, #60a5fa);
-    color: #fff;
-    border-color: transparent;
+  background: #0d6efd;
+  color: #ffffff;
+  border-color: #0d6efd;
 }
 
 .btn-outline-success {
-    border-color: #10b981;
-    color: #10b981;
+  border-color: #198754;
+  color: #198754;
 }
 
 .btn-outline-success:hover {
-    background: linear-gradient(90deg, #10b981, #34d399);
-    color: #fff;
-    border-color: transparent;
+  background: #198754;
+  color: #ffffff;
+  border-color: #198754;
 }
 
 .btn-outline-info {
-    border-color: #0ea5e9;
-    color: #0ea5e9;
+  border-color: #0dcaf0;
+  color: #0dcaf0;
 }
 
 .btn-outline-info:hover {
-    background: linear-gradient(90deg, #0ea5e9, #38bdf8);
-    color: #fff;
-    border-color: transparent;
+  background: #0dcaf0;
+  color: #ffffff;
+  border-color: #0dcaf0;
 }
 
 .comment-text {
-    border-radius: 10px;
-    border: 1px solid #d1d5db;
-    resize: none;
-    font-size: 0.9rem;
-    padding: 0.75rem;
-    margin-bottom: 0.75rem;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  border-radius: 4px;
+  border: 1px solid #ced4da;
+  resize: none;
+  font-size: 0.9rem;
+  padding: 0.5rem;
+  margin-bottom: 0.5rem;
+  height: 100px; /* Increased from 80px for larger input area */
 }
 
 .comment-btn {
-    background: linear-gradient(90deg, #3b82f6, #60a5fa);
-    border: none;
-    color: #fff;
-    font-weight: 500;
-    padding: 0.5rem 1.25rem;
-    border-radius: 50px;
-    transition: all 0.3s ease;
+  background: #0057cc; /* Darker blue for better visibility */
+  border: none;
+  color: #ffffff;
+  font-weight: 500;
+  padding: 0.5rem 1.25rem; /* Increased from 0.35rem 1rem for larger button */
+  font-size: 1rem; /* Increased from 0.95rem for larger text */
+  border-radius: 4px;
+  transition: all 0.2s ease;
 }
 
 .comment-btn:hover {
-    background: linear-gradient(90deg, #2563eb, #3b82f6);
-    transform: translateY(-2px);
+  background: #0047b3; /* Darker hover state */
+  transform: translateY(-1px);
 }
 
-/* Modal Styles (Updated) */
+/* Modal Styles */
 .modal-content {
-    border-radius: 16px;
-    border: none;
-    background: #ffffff;
-    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
-    position: relative;
-    overflow: hidden;
-}
-
-.modal-content::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: linear-gradient(145deg, rgba(255, 255, 255, 0.98), rgba(248, 250, 252, 0.95));
-    z-index: 0;
-}
-
-.modal-dialog.modal-xl {
-    max-width: 1000px;
+  border-radius: 8px;
+  border: none;
+  background: #ffffff;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
 
 .modal-header {
-    border-bottom: none;
-    padding: 1.5rem 2rem;
-    position: relative;
-    z-index: 1;
+  border-bottom: none;
+  padding: 1rem;
 }
 
 .modal-title {
-    font-size: 1.5rem;
-    font-weight: 700;
-    color: #1f2937;
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: #212529;
 }
 
 .modal-body {
-    padding: 0 2rem 2rem;
-    position: relative;
-    z-index: 1;
+  padding: 0 1rem 1rem;
 }
 
-.carousel-item img {
-    width: 100%;
-    height: 360px;
-    object-fit: cover;
-    border-radius: 12px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
-    transition: transform 0.3s ease;
+/* Modal Image Styling */
+.modal-carousel-image {
+  width: 100%;
+  max-height: 300px; /* Reduced height for better fit */
+  object-fit: contain; /* Preserve aspect ratio, no stretching */
+  object-position: center; /* Center the image */
+  border-radius: 8px;
+  background-color: #f8f9fa; /* Background for empty space around image */
 }
 
-.carousel-item.active img {
-    transform: scale(1.01);
+.carousel-item {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #f8f9fa; /* Background for carousel item */
 }
 
-.carousel-control-prev, .carousel-control-next {
-    width: 5%;
-    background: rgba(0, 0, 0, 0.2);
-    border-radius: 12px;
-    transition: background 0.3s ease;
-}
-
-.carousel-control-prev:hover, .carousel-control-next:hover {
-    background: rgba(0, 0, 0, 0.4);
-}
-
-.carousel-control-prev-icon, .carousel-control-next-icon {
-    background-size: 50%;
+.carousel-control-prev,
+.carousel-control-next {
+  width: 5%;
 }
 
 .modal-post-content {
-    margin-top: 1.5rem;
+  margin-top: 1rem;
 }
 
 .modal-post-content p {
-    font-size: 0.95rem;
-    color: #4b5563;
-    line-height: 1.6;
-    margin-bottom: 1.5rem;
+  font-size: 0.95rem;
+  color: #6c757d;
+  margin-bottom: 1rem;
 }
 
 .modal-post-stats {
-    font-size: 0.9rem;
-    color: #6b7280;
-    margin-bottom: 1.5rem;
-    display: flex;
-    gap: 1.5rem;
+  font-size: 0.85rem;
+  color: #6c757d;
+  margin-bottom: 1rem;
+  display: flex;
+  gap: 1rem;
 }
 
 .modal-post-stats span {
-    display: flex;
-    align-items: center;
-    gap: 0.4rem;
-    font-weight: 500;
-    transition: transform 0.2s ease;
-}
-
-.modal-post-stats span:hover {
-    transform: scale(1.1);
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  font-weight: 500;
 }
 
 .comments-panel {
-    background: #f9fafb;
-    border-radius: 12px;
-    padding: 1.5rem;
-    height: 100%;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
-    transition: all 0.3s ease;
+  background: #f8f9fa;
+  border-radius: 4px;
+  padding: 1rem;
+  height: 100%; /* Ensure it takes full height of the modal */
+  display: flex;
+  flex-direction: column;
+  min-height: 0; /* Allow flexible height */
 }
 
 .show-comments-btn {
-    border-radius: 50px;
-    padding: 0.5rem 1.5rem;
-    font-weight: 500;
-    border: 2px solid #3b82f6;
-    color: #3b82f6;
-    background: transparent;
-    transition: all 0.3s ease;
-    width: 100%;
-    margin-bottom: 1rem;
+  border-radius: 4px;
+  padding: 0.25rem 0.75rem;
+  font-weight: 500;
+  border: 1px solid #0d6efd;
+  color: #0d6efd;
+  background: transparent;
+  transition: all 0.2s ease;
+  width: 100%;
+  margin-bottom: 0.5rem;
 }
 
 .show-comments-btn:hover {
-    background: linear-gradient(90deg, #3b82f6, #60a5fa);
-    color: #fff;
-    transform: translateY(-2px);
+  background: #0d6efd;
+  color: #ffffff;
 }
 
 .comments-section {
-    max-height: 400px;
-    overflow-y: auto;
-    padding: 1rem;
-    background: #ffffff;
-    border-radius: 8px;
-    box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.03);
-    transition: max-height 0.3s ease;
+  max-height: 300px; /* Increased from 250px to accommodate larger textarea and button */
+  overflow-y: auto;
+  padding: 0.5rem;
+  background: #ffffff;
+  border-radius: 4px;
+  flex-grow: 1;
+  min-height: 0; /* Allow flexible height */
 }
 
 .comments-section h6 {
-    font-size: 1rem;
-    font-weight: 600;
-    color: #1f2937;
-    margin-bottom: 1rem;
+  font-size: 1rem;
+  font-weight: 600;
+  color: #212529;
+  margin-bottom: 0.5rem;
 }
 
 .comments-list .comment-item {
-    padding: 0.75rem;
-    border-radius: 8px;
-    margin-bottom: 0.75rem;
-    background: #f9fafb;
-    transition: transform 0.2s ease, background 0.2s ease;
-}
-
-.comments-list .comment-item:hover {
-    transform: translateY(-2px);
-    background: #f1f5f9;
+  padding: 0.5rem;
+  border-radius: 4px;
+  margin-bottom: 0.5rem;
+  background: #f8f9fa;
 }
 
 .comments-list strong {
-    color: #1f2937;
-    font-size: 0.9rem;
-    font-weight: 600;
+  color: #212529;
+  font-size: 0.9rem;
+  font-weight: 600;
 }
 
 .comments-list small {
-    color: #6b7280;
-    font-size: 0.8rem;
-    margin-left: 0.5rem;
+  color: #6c757d;
+  font-size: 0.8rem;
+  margin-left: 0.5rem;
 }
 
 .comments-list p {
-    margin: 0.5rem 0 0;
-    color: #374151;
-    font-size: 0.9rem;
-    line-height: 1.5;
+  margin: 0.25rem 0 0;
+  color: #495057;
+  font-size: 0.9rem;
 }
 
 .modal-footer {
-    border-top: none;
-    padding: 1rem 2rem;
-    position: relative;
-    z-index: 1;
+  border-top: none;
+  padding: 0.75rem;
 }
 
-/* Responsive Adjustments (Updated) */
+/* Ensure modal appears above sidebar */
+.modal-backdrop {
+  z-index: 1040 !important;
+}
+
+.modal {
+  z-index: 1070 !important;
+}
+
+/* Responsive Adjustments */
+@media (max-width: 992px) {
+  .modal-lg {
+    max-width: 90%; /* Slightly smaller on medium screens */
+  }
+
+  .modal-carousel-image {
+    max-height: 250px; /* Smaller image height on medium screens */
+  }
+
+  .comments-section {
+    max-height: 250px; /* Reduced from 300px for medium screens */
+  }
+
+  .modal-post-content p {
+    font-size: 0.9rem; /* Slightly smaller text */
+  }
+
+  .modal-title {
+    font-size: 1.1rem; /* Smaller title */
+  }
+}
+
 @media (max-width: 768px) {
-    .post-card {
-        max-width: 100%;
-    }
+  .main-content {
+    margin-left: 0; /* Remove left margin on mobile if sidebar collapses */
+    margin-top: 120px; /* Adjust for header height */
+  }
 
-    .post-image {
-        height: 180px;
-    }
+  .search-bar-container {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
 
-    .carousel-item img {
-        height: 280px;
-    }
+  .search-bar {
+    max-width: 100%;
+  }
 
-    .action-btn {
-        padding: 0.4rem 1rem;
-        font-size: 0.85rem;
-    }
+  .category-dropdown {
+    position: static;
+    width: 100%;
+  }
 
-    .modal-post-stats {
-        font-size: 0.85rem;
-        gap: 1rem;
-    }
+  .d-flex.justify-content-between.align-items-center.mb-4 {
+    flex-direction: column;
+    align-items: flex-start;
+  }
 
-    .modal-body .row {
-        flex-direction: column;
-    }
+  .post-card {
+    max-width: 100%; /* Allow cards to take full width on mobile */
+    height: 600px; /* Increased from 550px for mobile */
+  }
 
-    .modal-body .col-md-8,
-    .modal-body .col-md-4 {
-        width: 100%;
-    }
+  .post-image {
+    height: 240px; /* Increased from 220px for mobile */
+  }
 
-    .comments-panel {
-        margin-top: 1.5rem;
-    }
+  .post-images-container {
+    height: 240px; /* Match image height on mobile */
+  }
 
-    .comments-section {
-        max-height: 300px;
-    }
+  /* Modal Adjustments for Mobile */
+  .modal-lg {
+    max-width: 95%; /* Almost full width on mobile */
+  }
 
-    .modal-dialog.modal-xl {
-        max-width: 95%;
-    }
+  .modal-body {
+    padding: 0 0.5rem 0.5rem; /* Reduced padding on mobile */
+  }
 
-    .modal-content {
-        border-radius: 12px;
-    }
+  .modal-carousel-image {
+    max-height: 200px; /* Even smaller image height on mobile */
+  }
 
-    .modal-header, .modal-body, .modal-footer {
-        padding: 1rem 1.5rem;
-    }
+  .modal-post-content {
+    margin-top: 0.5rem;
+  }
+
+  .modal-post-content p {
+    font-size: 0.85rem; /* Smaller text on mobile */
+  }
+
+  .modal-post-stats {
+    font-size: 0.8rem; /* Smaller stats text */
+  }
+
+  .comments-panel {
+    padding: 0.5rem; /* Reduced padding */
+  }
+
+  .comments-section {
+    max-height: 200px; /* Reduced from 250px for mobile */
+  }
+
+  .modal-title {
+    font-size: 1rem; /* Smaller title on mobile */
+  }
+
+  .action-btn {
+    font-size: 0.75rem; /* Smaller buttons on mobile */
+    padding: 0.2rem 0.5rem;
+  }
+
+  .modal-footer .btn {
+    font-size: 0.85rem; /* Smaller close button */
+    padding: 0.25rem 0.75rem;
+  }
+
+  .comment-text {
+    height: 80px; /* Reduced from 100px for mobile */
+  }
+
+  .comment-btn {
+    padding: 0.4rem 1rem; /* Slightly smaller padding on mobile */
+    font-size: 0.95rem; /* Slightly smaller font */
+  }
 }
 
 @media (max-width: 576px) {
-    .post-image {
-        height: 160px;
-    }
+  .modal-lg {
+    max-width: 98%; /* Full width on very small screens */
+  }
 
-    .carousel-item img {
-        height: 220px;
-    }
+  .modal-carousel-image {
+    max-height: 180px; /* Smallest image height on very small screens */
+  }
 
-    .post-stats {
-        flex-direction: row;
-        gap: 1rem;
-        flex-wrap: wrap;
-    }
+  .comments-section {
+    max-height: 150px; /* Smallest comments section on very small screens */
+  }
 
-    .modal-post-stats {
-        flex-direction: row;
-        gap: 1rem;
-        flex-wrap: wrap;
-    }
+  .modal-post-content p {
+    font-size: 0.8rem; /* Smallest text on very small screens */
+  }
 
-    .action-btn {
-        padding: 0.4rem 0.9rem;
-        font-size: 0.8rem;
-    }
+  .modal-post-stats {
+    font-size: 0.75rem; /* Smallest stats text */
+  }
 
-    .comment-btn {
-        padding: 0.4rem 1.2rem;
-    }
+  .action-btn {
+    font-size: 0.7rem; /* Smallest buttons on very small screens */
+    padding: 0.15rem 0.4rem;
+  }
+
+  .comment-text {
+    height: 70px; /* Further reduced for very small screens */
+  }
+
+  .comment-btn {
+    padding: 0.35rem 0.75rem; /* Smaller padding on very small screens */
+    font-size: 0.9rem; /* Smaller font */
+  }
 }

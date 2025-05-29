@@ -18,67 +18,102 @@ $payment = get_user_payment($conn, $_SESSION['user_id']);
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Payment - BizShowcase</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link href="css/styles.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <link href="css/payment.css" rel="stylesheet">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
-<body>
-    <nav class="navbar navbar-expand-lg navbar-light bg-light">
-        <div class="container-fluid">
-            <a class="navbar-brand" href="home.php">BizShowcase</a>
-            <div class="collapse navbar-collapse">
-                <ul class="navbar-nav me-auto">
-                    <li class="nav-item"><a class="nav-link" href="home.php">Home</a></li>
-                    <li class="nav-item"><a class="nav-link" href="profile.php">Profile</a></li>
-                    <li class="nav-item"><a class="nav-link" href="settings.php">Settings</a></li>
-                    <li class="nav-item"><a class="nav-link" href="add-post.php">Add Post</a></li>
-                    <li class="nav-item"><a class="nav-link" href="subscription.php">Subscription</a></li>
-                    <li class="nav-item"><a class="nav-link active" href="payment.php">Payment</a></li>
-                    <li class="nav-item"><a class="nav-link" href="logout.php">Logout</a></li>
-                </ul>
-            </div>
-        </div>
-    </nav>
+<body class="bg-light">
+    <?php include 'header.php'; ?>
+    <?php include 'sidebar.php'; ?>
 
-    <div class="container mt-4">
-        <h2>Payment</h2>
-        <?php if ($subscription): ?>
-            <div class="card">
-                <div class="card-body">
-                    <h5>Subscription Status: <?php echo htmlspecialchars($subscription['subscription_status']); ?></h5>
-                    <p><strong>Type:</strong> <?php echo htmlspecialchars($subscription['subscription_type']); ?></p>
-                    <p><strong>Amount:</strong> $<?php echo $subscription['amount']; ?></p>
-                    <?php if ($payment): ?>
-                        <p><strong>Payment Status:</strong> <?php echo htmlspecialchars($payment['payment_status']); ?></p>
-                        <?php if ($payment['receipt_path']): ?>
-                            <a href="<?php echo $payment['receipt_path']; ?>" class="btn btn-sm btn-primary" target="_blank">View Receipt</a>
+    <div class="main-content">
+        <div class="form-section">
+            <div class="form-title">Payment Dashboard</div>
+            <?php if ($subscription): ?>
+                <div class="card shadow-sm">
+                    <div class="card-body">
+                        <h3 class="card-title mb-3">Subscription Details</h3>
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                <p><strong>Status:</strong> <span class="status-<?php echo $subscription['subscription_status'] === 'approved' ? 'success' : 'danger'; ?>"><?php echo htmlspecialchars($subscription['subscription_status']); ?></span></p>
+                                <p><strong>Type:</strong> <?php echo htmlspecialchars($subscription['subscription_type']); ?></p>
+                                <p><strong>Amount:</strong> $<?php echo number_format($subscription['amount'], 2); ?></p>
+                            </div>
+                            <?php if ($payment): ?>
+                                <div class="col-md-6">
+                                    <p><strong>Payment Status:</strong> <span class="status-<?php echo $payment['payment_status'] === 'completed' ? 'success' : 'warning'; ?>"><?php echo htmlspecialchars($payment['payment_status']); ?></span></p>
+                                    <?php if ($payment['receipt_path']): ?>
+                                        <a href="<?php echo $payment['receipt_path']; ?>" class="btn btn-primary btn-sm" target="_blank"><i class="fas fa-file-pdf me-2"></i>View Receipt</a>
+                                    <?php endif; ?>
+                                </div>
+                            <?php endif; ?>
+                        </div>
+                        <?php if ($subscription['subscription_status'] === 'approved' && (!$payment || $payment['payment_status'] === 'pending')): ?>
+                            <div class="mt-4">
+                                <button class="btn btn-success initiate-payment" data-subscription-id="<?php echo $subscription['subscription_id']; ?>" id="initiate-payment-btn">
+                                    <span class="btn-text"><i class="fas fa-money-bill-wave me-2"></i>Initiate Payment</span>
+                                    <span class="spinner-border spinner-border-sm d-none ms-2" role="status" aria-hidden="true"></span>
+                                </button>
+                                <p class="text-muted mt-2"><i class="fas fa-info-circle me-2"></i>Please visit the admin office to complete your payment in cash.</p>
+                            </div>
                         <?php endif; ?>
-                    <?php endif; ?>
-                    <?php if ($subscription['subscription_status'] === 'approved' && (!$payment || $payment['payment_status'] === 'pending')): ?>
-                        <button class="btn btn-primary mt-3 initiate-payment" data-subscription-id="<?php echo $subscription['subscription_id']; ?>">Initiate Payment</button>
-                        <p class="mt-2">Please visit the admin office to complete your payment in cash.</p>
-                    <?php endif; ?>
+                    </div>
                 </div>
-            </div>
-        <?php else: ?>
-            <p>No active subscription found. Please submit a subscription request first.</p>
-            <a href="subscription.php" class="btn btn-primary">Go to Subscription</a>
-        <?php endif; ?>
+            <?php else: ?>
+                <div class="card shadow-sm text-center">
+                    <div class="card-body">
+                        <p class="text-muted mb-3"><i class="fas fa-exclamation-triangle me-2"></i>No active subscription found. Please submit a subscription request first.</p>
+                        <a href="subscription.php" class="btn btn-primary"><i class="fas fa-arrow-right me-2"></i>Go to Subscription</a>
+                    </div>
+                </div>
+            <?php endif; ?>
+        </div>
     </div>
 
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script>
         $(document).ready(function() {
+            // Initiate payment
             $('.initiate-payment').click(function() {
-                let subscriptionId = $(this).data('subscription-id');
+                const $btn = $(this);
+                const $btnText = $btn.find('.btn-text');
+                const $spinner = $btn.find('.spinner-border');
+                const subscriptionId = $btn.data('subscription-id');
+
+                // Show loading state
+                $btn.prop('disabled', true);
+                $btnText.html('<i class="fas fa-spinner me-2"></i>Initiating...');
+                $spinner.removeClass('d-none');
+
                 $.ajax({
                     url: '../ajax/user_actions.php',
                     method: 'POST',
                     data: { action: 'initiate_payment', subscription_id: subscriptionId },
                     success: function(response) {
                         alert('Payment initiated. Please visit the admin office to complete payment.');
+                        $btnText.html('<i class="fas fa-money-bill-wave me-2"></i>Initiate Payment');
+                        $spinner.addClass('d-none');
+                        $btn.prop('disabled', false);
+                    },
+                    error: function(xhr) {
+                        alert('Error: ' + xhr.responseText);
+                        $btnText.html('<i class="fas fa-money-bill-wave me-2"></i>Initiate Payment');
+                        $spinner.addClass('d-none');
+                        $btn.prop('disabled', false);
                     }
                 });
             });
+
+            // Sidebar toggle
+            window.toggleSidebar = function() {
+                document.getElementById('sidebar').classList.toggle('collapsed');
+            };
+
+            // Auto-collapse sidebar on page load
+            window.onload = function() {
+                toggleSidebar();
+            };
         });
     </script>
 </body>

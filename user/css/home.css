@@ -16,7 +16,7 @@ body {
 /* Search Bar Section */
 .search-bar-section {
   padding: 1.5rem 0;
-  background: #ffffff;
+  background-color: #ffffff;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
   z-index: 1050; /* Below header but above content */
 }
@@ -88,8 +88,8 @@ body {
   margin-bottom: 1rem;
   transition: transform 0.2s ease;
   width: 100%;
-  max-width: 350px; /* Fixed width for all cards */
-  height: 500px; /* Fixed height for all cards */
+  max-width: 400px; /* Increased from 350px */
+  height: 550px; /* Increased from 500px to accommodate more content */
   display: flex;
   flex-direction: column;
 }
@@ -104,12 +104,12 @@ body {
   display: flex;
   flex-direction: column;
   justify-content: space-between; /* Distribute content evenly */
-  overflow: hidden; /* Prevent overflow */
+  overflow: hidden; /* Prevent content overflow */
 }
 
 .post-image {
   width: 100%;
-  height: 200px; /* Fixed height for images */
+  height: 220px; /* Increased from 200px */
   object-fit: contain; /* Preserve aspect ratio, no stretching */
   object-position: center; /* Center the image */
   border-radius: 8px 8px 0 0;
@@ -122,11 +122,11 @@ body {
   border-radius: 8px 8px 0 0;
   overflow: hidden;
   width: 100%;
-  height: 200px; /* Match image height */
+  height: 220px; /* Increased from 200px */
   display: flex;
   justify-content: center;
   align-items: center;
-  background-color: #f8f9fa; /* Background for 'No images' case or empty space */
+  background-color: #f8f9fa; /* Background for 'No images' case */
 }
 
 .post-card .card-title {
@@ -144,7 +144,7 @@ body {
   color: #6c757d;
   margin-bottom: 0.75rem;
   display: -webkit-box;
-  -webkit-line-clamp: 3; /* Limit to 3 lines */
+  -webkit-line-clamp: 5; /* Show up to 5 lines of description */
   -webkit-box-orient: vertical;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -226,21 +226,22 @@ body {
   font-size: 0.9rem;
   padding: 0.5rem;
   margin-bottom: 0.5rem;
-  height: 60px; /* Fixed height for comment textarea */
+  height: 100px; /* Increased from 80px for larger input area */
 }
 
 .comment-btn {
-  background: #0d6efd;
+  background: #0057cc; /* Darker blue for better visibility */
   border: none;
   color: #ffffff;
   font-weight: 500;
-  padding: 0.25rem 0.75rem;
+  padding: 0.5rem 1.25rem; /* Increased from 0.35rem 1rem for larger button */
+  font-size: 1rem; /* Increased from 0.95rem for larger text */
   border-radius: 4px;
   transition: all 0.2s ease;
 }
 
 .comment-btn:hover {
-  background: #0b5ed7;
+  background: #0047b3; /* Darker hover state */
   transform: translateY(-1px);
 }
 
@@ -267,7 +268,7 @@ body {
   padding: 0 1rem 1rem;
 }
 
-/* Updated Modal Image Styling */
+/* Modal Image Styling */
 .modal-carousel-image {
   width: 100%;
   max-height: 300px; /* Reduced height for better fit */
@@ -321,6 +322,7 @@ body {
   height: 100%; /* Ensure it takes full height of the modal */
   display: flex;
   flex-direction: column;
+  min-height: 0; /* Allow flexible height */
 }
 
 .show-comments-btn {
@@ -341,12 +343,13 @@ body {
 }
 
 .comments-section {
-  max-height: 200px; /* Reduced height to fit smaller modal */
+  max-height: 300px; /* Increased from 250px to accommodate larger textarea and button */
   overflow-y: auto;
   padding: 0.5rem;
   background: #ffffff;
   border-radius: 4px;
-  flex-grow: 1; /* Allow comments section to grow */
+  flex-grow: 1;
+  min-height: 0; /* Allow flexible height */
 }
 
 .comments-section h6 {
@@ -406,7 +409,7 @@ body {
   }
 
   .comments-section {
-    max-height: 150px; /* Smaller comments section on medium screens */
+    max-height: 250px; /* Reduced from 300px for medium screens */
   }
 
   .modal-post-content p {
@@ -445,15 +448,15 @@ body {
 
   .post-card {
     max-width: 100%; /* Allow cards to take full width on mobile */
-    height: 550px; /* Slightly taller on mobile to accommodate content */
+    height: 600px; /* Increased from 550px for mobile */
   }
 
   .post-image {
-    height: 220px; /* Slightly taller image on mobile */
+    height: 240px; /* Increased from 220px for mobile */
   }
 
   .post-images-container {
-    height: 220px; /* Match image height on mobile */
+    height: 240px; /* Match image height on mobile */
   }
 
   /* Modal Adjustments for Mobile */
@@ -486,7 +489,7 @@ body {
   }
 
   .comments-section {
-    max-height: 120px; /* Smaller comments section on mobile */
+    max-height: 200px; /* Reduced from 250px for mobile */
   }
 
   .modal-title {
@@ -502,6 +505,15 @@ body {
     font-size: 0.85rem; /* Smaller close button */
     padding: 0.25rem 0.75rem;
   }
+
+  .comment-text {
+    height: 80px; /* Reduced from 100px for mobile */
+  }
+
+  .comment-btn {
+    padding: 0.4rem 1rem; /* Slightly smaller padding on mobile */
+    font-size: 0.95rem; /* Slightly smaller font */
+  }
 }
 
 @media (max-width: 576px) {
@@ -514,7 +526,7 @@ body {
   }
 
   .comments-section {
-    max-height: 100px; /* Smallest comments section on very small screens */
+    max-height: 150px; /* Smallest comments section on very small screens */
   }
 
   .modal-post-content p {
@@ -528,5 +540,14 @@ body {
   .action-btn {
     font-size: 0.7rem; /* Smallest buttons on very small screens */
     padding: 0.15rem 0.4rem;
+  }
+
+  .comment-text {
+    height: 70px; /* Further reduced for very small screens */
+  }
+
+  .comment-btn {
+    padding: 0.35rem 0.75rem; /* Smaller padding on very small screens */
+    font-size: 0.9rem; /* Smaller font */
   }
 }

@@ -183,8 +183,8 @@
         <div class="col-md-3 mb-3">
           <h6>Quick Links</h6>
           <ul class="list-unstyled text-muted small">
-            <li><a href="#">About Us</a></li>
-            <li><a href="#">Contact Us</a></li>
+            <li><a href="user/aboutUs.php">About Us</a></li>
+            <li><a href="user/contactUs.php">Contact Us</a></li>
             <li><a href="#">FAQs</a></li>
             <li><a href="#">Support</a></li>
             <li><a href="#">Blog</a></li>

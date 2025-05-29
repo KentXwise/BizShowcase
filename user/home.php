@@ -11,8 +11,8 @@ if (!isset($_SESSION['user_id'])) {
 $categories = get_categories($conn);
 $posts = get_all_posts($conn);
 
-// Set current date and time (02:21 AM PST on Wednesday, May 28, 2025)
-$currentDateTime = new DateTime('2025-05-28 02:21:00', new DateTimeZone('America/Los_Angeles'));
+// Set current date and time (03:40 PM PST on Wednesday, May 28, 2025)
+$currentDateTime = new DateTime('2025-05-28 15:40:00', new DateTimeZone('America/Los_Angeles'));
 
 // Function to get counts for likes, favorites, and comments
 function get_post_counts($conn, $post_id) {
@@ -24,7 +24,6 @@ function get_post_counts($conn, $post_id) {
     return $stmt->fetch(PDO::FETCH_ASSOC);
 }
 ?>
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -47,7 +46,7 @@ function get_post_counts($conn, $post_id) {
         <div class="search-bar-section">
             <div class="search-bar-container">
                 <div class="input-group search-bar">
-                    <input type="text" id="searchUser" class="form-control" placeholder="Search users..." aria-label="Search users">
+                    <input type="text" id="searchUser" class="form-control" placeholder="Search Business..." aria-label="Search users">
                     <span class="input-group-text"><i class="fas fa-search"></i></span>
                 </div>
                 <div class="category-dropdown">
@@ -99,7 +98,7 @@ function get_post_counts($conn, $post_id) {
                                     <?php endif; ?>
                                     <div class="card-body">
                                         <h5 class="card-title"><?php echo htmlspecialchars($post['company_name']); ?></h5>
-                                        <p class="card-text"><?php echo htmlspecialchars(substr($post['description'], 0, 100)) . (strlen($post['description']) > 100 ? '...' : ''); ?></p>
+                                        <p class="card-text"><?php echo htmlspecialchars(substr($post['description'], 0, 150)) . (strlen($post['description']) > 150 ? '...' : ''); ?></p>
                                         <div class="post-stats">
                                             <span><i class="fas fa-thumbs-up"></i> <span class="like-count"><?php echo $counts['like_count']; ?></span></span>
                                             <span><i class="fas fa-star"></i> <span class="favorite-count"><?php echo $counts['favorite_count']; ?></span></span>
@@ -128,7 +127,7 @@ function get_post_counts($conn, $post_id) {
                                             <textarea class="form-control comment-text" 
                                                       placeholder="Add a comment..." 
                                                       aria-label="Comment input for post <?php echo $post['post_id']; ?>"></textarea>
-                                            <button class="btn comment-btn mt-2 comment-btn" 
+                                            <button class="btn comment-btn mt-2" 
                                                     data-post-id="<?php echo $post['post_id']; ?>"
                                                     aria-label="Submit comment">
                                                 Comment
@@ -219,6 +218,16 @@ function get_post_counts($conn, $post_id) {
                                                             <div class="comments-section" id="comments-section-<?php echo $post['post_id']; ?>" style="display: none;">
                                                                 <h6>Comments</h6>
                                                                 <div class="comments-list"></div>
+                                                                <div class="mt-2">
+                                                                    <textarea class="form-control comment-text" 
+                                                                              placeholder="Add a comment..." 
+                                                                              aria-label="Comment input for post <?php echo $post['post_id']; ?>"></textarea>
+                                                                    <button class="btn comment-btn mt-2" 
+                                                                            data-post-id="<?php echo $post['post_id']; ?>"
+                                                                            aria-label="Submit comment">
+                                                                        Comment
+                                                                    </button>
+                                                                </div>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -270,14 +279,15 @@ function get_post_counts($conn, $post_id) {
                         <button class="carousel-control-prev" type="button" data-bs-target="#carousel-${post.post_id}" data-bs-slide="prev" aria-label="Previous image">
                             <span class="carousel-control-prev-icon"></span>
                         </button>
-                        <button class="carousel-control-next" type="button" data-bs-target="#carousel-${post.post_id}" data-bs-slide="next" aria-label="Next image">
+                        <button class="carousel-control-next" type="button" data-bs-target="#carousel-${post.post_id}" data-bs-slide="next" 
+                            aria-label="Next image">
                             <span class="carousel-control-next-icon"></span>
                         </button>
                     ` : '';
 
                     html += `
                         <div class="col-md-6 col-lg-4 mb-4">
-                            <div class="card post-card" data-post-id="${post.post_id}">
+                            <div class="card post-card-post-id="${post.post_id}">
                                 <div class="post-images-container">
                                     ${post.images && post.images.length > 0 ? 
                                         `<img src="../${post.images[0].image_path}" class="post-image" alt="Post image for ${post.company_name}" data-bs-toggle="modal" data-bs-target="#postModal-${post.post_id}" loading="lazy">` : 
@@ -286,7 +296,7 @@ function get_post_counts($conn, $post_id) {
                                 </div>
                                 <div class="card-body">
                                     <h5 class="card-title">${post.company_name}</h5>
-                                    <p class="card-text">${post.description.substring(0, 100)}${post.description.length > 100 ? '...' : ''}</p>
+                                    <p class="card-text">${post.description.substring(0, 150)}${post.description.length > 150 ? '...' : ''}</p>
                                     <div class="post-stats">
                                         <span><i class="fas fa-thumbs-up"></i> <span class="like-count">0</span></span>
                                         <span><i class="fas fa-star"></i> <span class="favorite-count">0</span></span>
@@ -315,7 +325,7 @@ function get_post_counts($conn, $post_id) {
                                         <textarea class="form-control comment-text" 
                                                   placeholder="Add a comment..." 
                                                   aria-label="Comment input for post ${post.post_id}"></textarea>
-                                        <button class="btn comment-btn mt-2 comment-btn" 
+                                        <button class="btn comment-btn mt-2" 
                                                 data-post-id="${post.post_id}" 
                                                 aria-label="Submit comment">Comment</button>
                                     </div>
@@ -378,6 +388,14 @@ function get_post_counts($conn, $post_id) {
                                                         <div class="comments-section" id="comments-section-${post.post_id}" style="display: none;">
                                                             <h6>Comments</h6>
                                                             <div class="comments-list"></div>
+                                                            <div class="mt-2">
+                                                                <textarea class="form-control comment-text" 
+                                                                          placeholder="Add a comment..." 
+                                                                          aria-label="Comment input for post ${post.post_id}"></textarea>
+                                                                <button class="btn comment-btn mt-2" 
+                                                                        data-post-id="${post.post_id}" 
+                                                                        aria-label="Submit comment">Comment</button>
+                                                            </div>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -547,10 +565,7 @@ function get_post_counts($conn, $post_id) {
                     data: { action: 'follow_user', followed_id: userId },
                     success: function(response) {
                         if (response.success) {
-                            let $card = $(`.post-card .follow-btn[data-user-id="${userId}"]`);
-                            let $modal = $(`#postModal-${post.post_id} .follow-btn[data-user-id="${userId}"]`);
-                            $card.prop('disabled', true).html('<i class="fas fa-check"></i> Following');
-                            $modal.prop('disabled', true).html('<i class="fas fa-check"></i> Following');
+                            $(`.follow-btn[data-user-id="${userId}"]`).prop('disabled', true).html('<i class="fas fa-check"></i> Following');
                         }
                     },
                     error: function(xhr) {
@@ -566,7 +581,8 @@ function get_post_counts($conn, $post_id) {
             $(document).on('click', '.comment-btn', function() {
                 let $button = $(this);
                 let postId = $button.data('post-id');
-                let commentText = $button.prev('.comment-text').val();
+                let $textarea = $button.prev('.comment-text');
+                let commentText = $textarea.val();
                 if (commentText.trim() === '') {
                     showToast('Please enter a comment.');
                     return;
@@ -583,8 +599,9 @@ function get_post_counts($conn, $post_id) {
                             let currentComments = parseInt($card.find('.comment-count').text()) || 0;
                             $card.find('.comment-count').text(currentComments + 1);
                             $modal.find('.modal-post-stats .comment-count').text(currentComments + 1);
-                            $card.find('.comment-text').val('');
-                            if ($modal.find('.comments-section').is(':visible')) {
+                            $textarea.val('');
+                            // Refresh comments in modal if comments section is visible
+                            if ($modal.find(`#comments-section-${postId}`).is(':visible')) {
                                 fetchComments(postId);
                             }
                         }
@@ -603,7 +620,7 @@ function get_post_counts($conn, $post_id) {
                 let $button = $(this);
                 let postId = $button.data('post-id');
                 let $modal = $(`#postModal-${postId}`);
-                let $commentsSection = $modal.find('.comments-section');
+                let $commentsSection = $modal.find(`#comments-section-${postId}`);
                 showLoading($button, true);
                 if ($commentsSection.is(':visible')) {
                     $commentsSection.hide();
@@ -624,13 +641,13 @@ function get_post_counts($conn, $post_id) {
                     data: { action: 'get_comments', post_id: postId },
                     success: function(response) {
                         let $modal = $(`#postModal-${postId}`);
-                        let $commentsList = $modal.find('.comments-list');
+                        let $commentsList = $modal.find(`#comments-section-${postId} .comments-list`);
                         let html = '';
                         if (response.error) {
                             html = `<p class="text-muted">${response.error}</p>`;
                         } else if (response.comments) {
                             if (response.comments.length === 0) {
-                                html = '<p class="text-muted">No comments yet.</p>';
+                                html = '<p class="text-muted">No comments available.</p>';
                             } else {
                                 response.comments.forEach(comment => {
                                     html += `
